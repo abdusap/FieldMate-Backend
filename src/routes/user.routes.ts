@@ -1,11 +1,11 @@
 import  express  from "express";
-import { signup } from "../controllers/user/signup";
-
+import { login, signup, verityOtp } from "../controllers/user/user.controller";
 
 export const user=express.Router()
 
 user.post('/signup',signup)
 
-// user.post('/signup',(req,res)=>{
-//     console.log('hai')
-// })
+user.post('/otp',verityOtp)
+
+user.post('/login',login)
+

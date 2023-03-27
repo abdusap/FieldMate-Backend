@@ -8,3 +8,7 @@ const mongodb:()=>void=()=>{
     }).then(()=>{console.log('Database connected')}).catch(()=>{console.log('cannot connect to database')})
 }
 export default mongodb
+
+
+
+// mongodb+srv://sapabdu:ugNPmWDCViLkjVIz@cluster0.ri7v6ef.mongodb.net/FieldMate?retryWrites=true&w=majority
