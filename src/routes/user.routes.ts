@@ -8,4 +8,7 @@ user.post('/signup',signup)
 user.post('/otp',verityOtp)
 
 user.post('/login',login)
+user.post('/test',test)
+
+
 

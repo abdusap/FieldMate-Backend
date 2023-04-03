@@ -19,6 +19,7 @@ app.use((0, cors_1.default)({
 }));
 const express_session_1 = __importDefault(require("express-session"));
 app.use((0, express_session_1.default)({
+    name: "fildmate",
     resave: true,
     saveUninitialized: true,
     secret: 'djfksfiddfi'
@@ -30,11 +31,17 @@ app.use((req, res, next) => {
 const path_1 = __importDefault(require("path"));
 app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, './uploads')));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const admin_routes_1 = require("./routes/admin.routes");
+const turf_routes_1 = require("./routes/turf.routes");
+const error_handler_1 = __importDefault(require("./error/error.handler"));
 // import { user } from './routes/user.routes'
 app.use((0, cookie_parser_1.default)());
 // app.use('/',userRouter)
 app.use('/', user_routes_1.user);
-app.get('/helo', (req, res) => {
-    console.log('helow');
-});
+app.use('/admin', admin_routes_1.admin);
+app.use('/turf', turf_routes_1.turf);
+app.use(error_handler_1.default);
+// app.get('/helo',(req, res)=>{
+//     console.log('helow')
+// })
 app.listen(9000, () => { console.log('server started'); });

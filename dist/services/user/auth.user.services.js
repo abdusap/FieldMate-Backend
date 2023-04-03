@@ -16,7 +16,7 @@ const user_repository_1 = __importDefault(require("../../repositories/user.repos
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userRepository = new user_repository_1.default();
 class AuthService {
-    finduser(name, mobile, email, password) {
+    finduser(name, mobile, email) {
         return __awaiter(this, void 0, void 0, function* () {
             const checkUserDupe = yield userRepository.finduser(email);
             return checkUserDupe;

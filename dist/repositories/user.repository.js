@@ -23,7 +23,9 @@ class UserRepository {
     }
     finduser(email) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(email);
             const user = yield user_model_1.default.findOne({ email: email });
+            console.log(user);
             return user;
         });
     }

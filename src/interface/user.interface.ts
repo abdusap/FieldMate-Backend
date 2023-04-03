@@ -6,7 +6,7 @@ export enum Gender {
   }
 
 export interface Iuser extends Document{
-    id:number
+    id:number;
     name: string;
     mobile: number;
     email: string;

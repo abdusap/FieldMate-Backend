@@ -1,12 +1,12 @@
 import UserRepository from "../../repositories/user.repository"
 import bcrypt from "bcrypt";
-import { Iuser, IUser } from "../../interface/user.interface";
+import { Iuser, } from "../../interface/user.interface";
 
 const userRepository=new UserRepository()
 
 class AuthService {
      
-    async finduser(name:string, mobile:number,email:string,password:string):Promise<Iuser|null>{
+    async finduser(name:string, mobile:number,email:string):Promise<Iuser|null>{
         const checkUserDupe=await userRepository.finduser(email)
         return checkUserDupe
     }

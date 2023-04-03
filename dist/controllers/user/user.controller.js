@@ -14,15 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.verityOtp = exports.signup = void 0;
 const user_validation_1 = __importDefault(require("../../validation/user.validation"));
-const auth_user_services_1 = __importDefault(require("../../services/user/auth.user.services"));
 const twilio_1 = require("../../config/twilio");
-const authService = new auth_user_services_1.default();
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const user_service_1 = __importDefault(require("../../services/user/user.service"));
+const userService = new user_service_1.default();
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const formData = req.body;
-    const mobile = req.body.mobile;
-    user_validation_1.default.validate(formData).then((validatedData) => __awaiter(void 0, void 0, void 0, function* () {
-        const { name, mobile, email, password } = validatedData;
-        const authUser = yield authService.finduser(name, mobile, email, password);
+    user_validation_1.default
+        .validate(formData)
+        .then((validatedData) => __awaiter(void 0, void 0, void 0, function* () {
+        const { name, mobile, email } = validatedData;
+        const authUser = yield userService.finduser(name, mobile, email);
         if (authUser)
             res.send({ success: false });
         else
@@ -30,7 +32,8 @@ const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
                 if (status)
                     res.send({ success: true });
             });
-    })).catch((validationErrors) => {
+    }))
+        .catch((validationErrors) => {
         console.log(validationErrors.message);
     });
 });
@@ -39,7 +42,7 @@ const verityOtp = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     const { otp, mobile, name, email, password } = req.body;
     const checkOtp = yield (0, twilio_1.checkVerificationToken)(otp, mobile);
     if (checkOtp) {
-        yield authService.createUser(name, mobile, email, password);
+        yield userService.createUser(name, mobile, email, password);
         res.json({ ok: true });
     }
     else
@@ -49,19 +52,23 @@ exports.verityOtp = verityOtp;
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     console.log(req.body);
-    const user = yield authService.verifyUser(email, password);
+    // const authHeader = req.headers.authorization;
+    // console.log(authHeader);
+    const user = yield userService.verifyUser(email, password);
     console.log(user);
     if (user === null) {
-        res.json({ message: 'Invalid user' });
+        res.json({ message: "Invalid user" });
     }
     else if (user === true) {
-        res.json({ verify: true, message: 'true' });
+        const token = jsonwebtoken_1.default.sign(req.body, "mysecretkey", { expiresIn: 86400 });
+        console.log(token);
+        res.json({ verify: true, message: "true", token: token });
     }
     else if (user === false) {
-        res.json({ verify: false, message: 'Email or Password Incorrect' });
+        res.json({ verify: false, message: "Email or Password Incorrect" });
     }
     else {
-        res.json({ message: 'Invalid user' });
+        res.json({ message: "Invalid user" });
     }
 });
 exports.login = login;

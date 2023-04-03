@@ -1,6 +1,7 @@
 // console.log('hainppffefe')
 import {user} from './routes/user.routes' 
 
+
 import express from 'express'
 const app=express()
 app.use(express.urlencoded({extended:true}))
@@ -20,6 +21,7 @@ app.use(
 
 import session from 'express-session'
 app.use(session({
+    name:"fildmate",
     resave:true,
     saveUninitialized:true,
     secret:'djfksfiddfi'
@@ -36,13 +38,22 @@ app.use('/uploads',express.static(path.join(__dirname,'./uploads')))
 
 
 import cookieParser from 'cookie-parser'
+import { admin } from './routes/admin.routes'
+import { turf } from './routes/turf.routes'
+import errorHandler from './error/error.handler'
 // import { user } from './routes/user.routes'
 app.use(cookieParser());
-
 // app.use('/',userRouter)
 app.use('/',user)
+app.use('/admin',admin)
+app.use('/turf',turf)
 
-app.get('/helo',(req, res)=>{
-    console.log('helow')
-})
+app.use(errorHandler)
+
+// app.get('/helo',(req, res)=>{
+//     console.log('helow')
+// })
+
+
+
 app.listen(9000,()=>{console.log('server started')})
