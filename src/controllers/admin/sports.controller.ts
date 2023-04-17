@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import SportsService from "../../services/admin/sports.service";
+import asyncHandler from "express-async-handler";
+import AppError from "../../error/error";
+
 
 const sportsService=new SportsService()
 
-export const addSports = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    console.log(req.body);
+export const addSports=asyncHandler(async(req,res)=>{ 
     const { name } = req.body;
-    await sportsService.AddSport(name);
+   const sports= await sportsService.AddSport(name);
+   if(sports)
     res.json({ success: true });
-  };
+    else
+    throw new AppError(409,"Sports Exist")
+  });
   
 
   export const findSports = async (

@@ -20,8 +20,15 @@ class TurfRepository{
         email:string,
         mobile:number
     ):Promise< Iturf | any> {
-        const turf = await turfModel.findOne({email:email,mobile:mobile})
+        const turf = await turfModel.findOne({
+            $or: [{ email: email }, { mobile: mobile }]
+          });
         return turf
+    }
+
+    async loginTurf(email:string):Promise<Iturf | null>{
+        const details=await turfModel.findOne({email:email})
+        return details
     }
 }
 

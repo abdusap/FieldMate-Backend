@@ -6,7 +6,12 @@ import SportsRepository from "../../repositories/admin/sports.repository"
 const sportsRepository=new SportsRepository()
 class LocationService extends LocationRepository{  
 
-    async AddLocation(name:string):Promise<Ilocation>{
+    async AddLocation(name:string):Promise<Ilocation | boolean>{
+        const locatonExist=await this.isLocationExist(name)
+        if(locatonExist){
+        const exist=false
+           return exist
+        }
         const location=this.addLocation(name)
         return location
        }

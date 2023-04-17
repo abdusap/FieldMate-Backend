@@ -12,22 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const turf_model_1 = __importDefault(require("../../models/turf.model"));
-class TurfRepository {
-    createTurf(name, mobile, email, location, gioCoordinates, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const turf = new turf_model_1.default({ name, mobile, email, location, gioCoordinates, password });
-            yield turf.save();
-            return turf;
-        });
-    }
-    findTurf(email, mobile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const turf = yield turf_model_1.default.findOne({
-                $or: [{ email: email }, { mobile: mobile }]
-            });
-            return turf;
-        });
-    }
-}
-exports.default = TurfRepository;
+exports.acceptTurf = exports.allTurf = void 0;
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const turf_service_1 = __importDefault(require("../../services/admin/turf.service"));
+const TurfService = new turf_service_1.default();
+exports.allTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const allTurf = yield TurfService.AllTurf();
+    res.send({ allTurf });
+}));
+exports.acceptTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('hai');
+    console.log(req.params);
+}));

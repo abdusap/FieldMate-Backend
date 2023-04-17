@@ -22,6 +22,12 @@ class SportsRepository {
             return sports;
         });
     }
+    isSportsExist(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sportsExist = yield sports_model_1.default.findOne({ name: name });
+            return sportsExist;
+        });
+    }
     findSports(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const objectId = new mongodb_1.ObjectId(id);

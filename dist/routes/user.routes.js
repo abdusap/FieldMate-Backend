@@ -10,3 +10,4 @@ exports.user = express_1.default.Router();
 exports.user.post('/signup', user_controller_1.signup);
 exports.user.post('/otp', user_controller_1.verityOtp);
 exports.user.post('/login', user_controller_1.login);
+exports.user.post('/test', user_controller_1.test);

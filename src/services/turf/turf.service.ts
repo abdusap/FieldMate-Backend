@@ -15,6 +15,20 @@ class TurfService extends TurfRepository{
         const turf=await this.findTurf(email,mobile)
         return turf
     }
+
+
+    
+    async Login(email:string,password:string):Promise<any>{
+        const accountDetail=await this.loginTurf(email)
+        if(accountDetail){
+          const hashedPassword:string=accountDetail.password
+          const matchPassword:boolean=await bcrypt.compare(password,hashedPassword)
+          return {
+            'matchStatus':matchPassword,'account':accountDetail}
+        }else
+           return null
+    } 
 }
+
 
 export default TurfService

@@ -12,41 +12,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signup = void 0;
+exports.verifyOtp = exports.signup = void 0;
 const turf_validation_1 = __importDefault(require("../../validation/turf.validation"));
 const turf_service_1 = __importDefault(require("../../services/turf/turf.service"));
 const error_1 = __importDefault(require("../../error/error"));
 const send_mail_1 = require("../../helper/send.mail");
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const turfService = new turf_service_1.default();
-const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.signup = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const formData = req.body;
-        turf_validation_1.default
-            .validate(formData)
-            .then((validatedData) => __awaiter(void 0, void 0, void 0, function* () {
-            const { name, mobile, email, location, gioCoordinates, password } = validatedData;
-            const otp = yield (0, send_mail_1.sendMail)(email, "approved");
+        const validatedData = yield turf_validation_1.default.validate(formData);
+        const { mobile, email } = validatedData;
+        const turfExist = yield turfService.FindTurf(mobile, email);
+        console.log(turfExist);
+        if (turfExist)
+            throw new error_1.default(409, "User Already Exist");
+        else {
+            const otp = yield (0, send_mail_1.sendMail)(email, "otp");
             console.log(otp);
-            const turfExist = yield turfService.FindTurf(mobile, email);
-            console.log(turfExist);
-            if (turfExist)
-                res.send({ success: false });
-            else {
-                const newTurf = yield turfService.CreateTurf(name, mobile, email, location, gioCoordinates, password);
-                console.log(newTurf);
-                res.send({ success: true });
-            }
-            // sendVerificationToken(mobile).then((status) => {
-            //   if (status) res.send({ success: true });
-            // });
-        })).catch(err => {
-            throw error_1.default.validationError(err.message);
-        });
+            res.json({ success: true, otp: otp });
+        }
     }
     catch (err) {
-        next(err);
-        // throw new AppError(500,err.message);
-        // console.log(err)
+        throw new error_1.default(400, err.message);
     }
-});
-exports.signup = signup;
+}));
+exports.verifyOtp = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    const orgOTP = req.body.OTP;
+    const enteredOTP = parseInt(req.body.EnteredOtp);
+    if (orgOTP === enteredOTP) {
+        console.log('verified');
+        const { name, mobile, email, location, gioCoordinates, password } = req.body;
+        yield turfService.CreateTurf(name, mobile, email, location, gioCoordinates, password);
+        res.send({ ok: true });
+    }
+    else {
+        throw new error_1.default(400, "Verification Failed");
+    }
+}));

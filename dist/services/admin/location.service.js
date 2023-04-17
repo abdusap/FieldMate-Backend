@@ -19,6 +19,11 @@ const sportsRepository = new sports_repository_1.default();
 class LocationService extends location_repository_1.default {
     AddLocation(name) {
         return __awaiter(this, void 0, void 0, function* () {
+            const locatonExist = yield this.isLocationExist(name);
+            if (locatonExist) {
+                const exist = false;
+                return exist;
+            }
             const location = this.addLocation(name);
             return location;
         });

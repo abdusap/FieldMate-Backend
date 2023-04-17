@@ -12,34 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sports_repository_1 = __importDefault(require("../../repositories/admin/sports.repository"));
-class SportsService extends sports_repository_1.default {
-    AddSport(name) {
+const turf_model_1 = __importDefault(require("../../models/turf.model"));
+class TurfRepository {
+    allTurf() {
         return __awaiter(this, void 0, void 0, function* () {
-            const sportsExist = yield this.isSportsExist(name);
-            if (sportsExist) {
-                const exist = false;
-                return exist;
-            }
-            const sports = this.addSports(name);
-            return sports;
-        });
-    }
-    FindSports(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = this.findSports(id);
-            return data;
-        });
-    }
-    // async GetLocationAndSport():Promise<any>{   
-    //     const data=adminRepositories.getLocationAndSports()
-    //     return data
-    // }
-    EditSports(id, name) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = this.editSports(id, name);
-            return data;
+            const allTurf = yield turf_model_1.default.find();
+            return allTurf;
         });
     }
 }
-exports.default = SportsService;
+exports.default = TurfRepository;

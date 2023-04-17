@@ -22,6 +22,13 @@ class LocationRepository {
             return location;
         });
     }
+    isLocationExist(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const locationExist = yield location_model_1.default.findOne({ name: name });
+            console.log(locationExist);
+            return locationExist;
+        });
+    }
     findLocation(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const objectId = new mongodb_1.ObjectId(id);

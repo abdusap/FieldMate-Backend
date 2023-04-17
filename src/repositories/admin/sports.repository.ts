@@ -9,6 +9,11 @@ class SportsRepository{
         return sports
     }
 
+    async isSportsExist(name:string):Promise <ISports|null>{
+        const sportsExist=await sportsModel.findOne({name:name}) 
+        return sportsExist
+    }
+
     async findSports(id:string):Promise<ISports|null>{
         const objectId=new ObjectId(id);
         const locationData=await sportsModel.findById(objectId)

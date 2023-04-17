@@ -14,14 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editSports = exports.findSports = exports.addSports = void 0;
 const sports_service_1 = __importDefault(require("../../services/admin/sports.service"));
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const error_1 = __importDefault(require("../../error/error"));
 const sportsService = new sports_service_1.default();
-const addSports = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
+exports.addSports = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name } = req.body;
-    yield sportsService.AddSport(name);
-    res.json({ success: true });
-});
-exports.addSports = addSports;
+    const sports = yield sportsService.AddSport(name);
+    if (sports)
+        res.json({ success: true });
+    else
+        throw new error_1.default(409, "Sports Exist");
+}));
 const findSports = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
     console.log(id);

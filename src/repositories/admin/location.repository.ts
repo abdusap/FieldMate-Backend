@@ -11,6 +11,13 @@ class LocationRepository{
         return location
     }
 
+    async isLocationExist(name:string):Promise <Ilocation|null>{
+        const locationExist=await locationModel.findOne({name:name})
+        console.log(locationExist);
+        
+        return locationExist
+    }
+     
     async findLocation(id:string):Promise<Ilocation|null>{
         const objectId=new ObjectId(id)
         const locationData=await locationModel.findById(objectId)

@@ -1,17 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import LocationService from "../../services/admin/location.service";
-
+import asyncHandler from "express-async-handler";
+import AppError from "../../error/error";
 
  const locationService=new LocationService()
-export const addLocation = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+ 
+ export const addLocation=asyncHandler(async(req,res)=>{ 
     const { name } = req.body;
     const location = await locationService.AddLocation(name)
+    console.log(location)
+    if(location)
     res.json({ success: true });
-  };
+    else
+    throw new AppError(409,"Location Exist")
+    
+  })
 
 
   export const getLocationAndSports = async (

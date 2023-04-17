@@ -8,6 +8,8 @@ import {
 } from "../../config/twilio";
 import jwt from "jsonwebtoken";
 import UserService from "../../services/user/user.service";
+import AppError from "../../error/error";
+
 
 const userService =new UserService()
 
@@ -82,8 +84,10 @@ export const test = async (
 ) => {
      try{
         console.log(req.body)
+        throw new AppError(400,'invalid id')
      }catch(err:any){
       console.log(err)
+      next(err)
      }
 }
 

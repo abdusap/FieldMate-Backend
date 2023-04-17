@@ -11,3 +11,4 @@ exports.turf = express_1.default.Router();
 exports.turf.get('/all_location', location_controller_1.allLocation);
 exports.turf.post('/signup', turf_controller_1.signup);
 // turf.patch('/turf_exist',checkTurfDupe)
+exports.turf.post('/otp', turf_controller_1.verifyOtp);

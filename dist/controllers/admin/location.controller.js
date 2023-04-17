@@ -14,13 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editLocation = exports.findLocation = exports.getLocationAndSports = exports.addLocation = void 0;
 const location_service_1 = __importDefault(require("../../services/admin/location.service"));
+const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const error_1 = __importDefault(require("../../error/error"));
 const locationService = new location_service_1.default();
-const addLocation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.addLocation = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name } = req.body;
     const location = yield locationService.AddLocation(name);
-    res.json({ success: true });
-});
-exports.addLocation = addLocation;
+    console.log(location);
+    if (location)
+        res.json({ success: true });
+    else
+        throw new error_1.default(409, "Location Exist");
+}));
 const getLocationAndSports = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield locationService.GetLocationAndSport();
     res.json({ data });

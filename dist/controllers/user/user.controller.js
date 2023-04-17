@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.verityOtp = exports.signup = void 0;
+exports.test = exports.login = exports.verityOtp = exports.signup = void 0;
 const user_validation_1 = __importDefault(require("../../validation/user.validation"));
 const twilio_1 = require("../../config/twilio");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_service_1 = __importDefault(require("../../services/user/user.service"));
+const error_1 = __importDefault(require("../../error/error"));
 const userService = new user_service_1.default();
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const formData = req.body;
@@ -72,3 +73,14 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const test = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+        throw new error_1.default(400, 'invalid id');
+    }
+    catch (err) {
+        console.log(err);
+        next(err);
+    }
+});
+exports.test = test;

@@ -3,7 +3,12 @@ import { ISports } from "../../interface/sports.interface"
 
 
 class SportsService extends SportsRepository{
-    async AddSport(name:string):Promise<ISports>{
+    async AddSport(name:string):Promise<ISports | boolean>{
+        const sportsExist=await this.isSportsExist(name)
+        if(sportsExist){
+        const exist=false
+           return exist
+        }
         const sports=this.addSports(name)
         return sports
     }
