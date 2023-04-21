@@ -12,21 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rejectTurf = exports.acceptTurf = exports.allTurf = void 0;
+exports.getAllSportsAndDetails = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
-const turf_service_1 = __importDefault(require("../../services/admin/turf.service"));
-const TurfService = new turf_service_1.default();
-exports.allTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const allTurf = yield TurfService.AllTurf();
-    res.send({ allTurf });
-}));
-exports.acceptTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.query.id;
-    const turfDetails = yield TurfService.AcceptTurf(id);
-    res.send({ success: true });
-}));
-exports.rejectTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.query.id;
-    const turfDetails = yield TurfService.RejectTurf(id);
-    res.send({ success: true });
+const sports_service_1 = __importDefault(require("../../services/turf/sports.service"));
+const turfDetails_service_1 = __importDefault(require("../../services/turf/turfDetails.service"));
+const sportsService = new sports_service_1.default();
+const turfDetail = new turfDetails_service_1.default();
+exports.getAllSportsAndDetails = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
+    const turfId = req.query.id;
+    const allSports = yield sportsService.AllSports();
+    const details = yield turfDetail.GetTurfDetails(turfId);
+    // console.log(details);
+    res.send({ allSports, details });
 }));

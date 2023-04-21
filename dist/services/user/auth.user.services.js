@@ -12,26 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_repository_1 = __importDefault(require("../../repositories/user.repository"));
+// import UserRepository from "../../repositories/user.repository"
+const user_repository_1 = __importDefault(require("../../repositories/user/user.repository"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userRepository = new user_repository_1.default();
 class AuthService {
     finduser(name, mobile, email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUserDupe = yield userRepository.finduser(email);
+            const checkUserDupe = yield userRepository.Finduser(email);
             return checkUserDupe;
         });
     }
     createUser(name, mobile, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-            const user = yield userRepository.createUser(name, mobile, email, hashedPassword);
+            const user = yield userRepository.CreateUser(name, mobile, email, hashedPassword);
             return user;
         });
     }
     verifyUser(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield userRepository.finduser(email);
+            const user = yield userRepository.Finduser(email);
             if (user) {
                 const hashedPassword = user.password;
                 const matchPassword = yield bcrypt_1.default.compare(password, hashedPassword);

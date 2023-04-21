@@ -9,7 +9,14 @@ export const allTurf=asyncHandler(async(req,res)=>{
 })
 
 export const acceptTurf=asyncHandler(async(req,res)=>{ 
-        console.log('hai')
-        console.log(req.params)
+        const id:any=req.query.id
+        const turfDetails=await TurfService.AcceptTurf(id)
+        res.send({success:true})
+})
+
+export const rejectTurf=asyncHandler(async(req,res)=>{ 
+        const id:any=req.query.id
+        const turfDetails=await TurfService.RejectTurf(id)
+        res.send({success:true})
 })
 

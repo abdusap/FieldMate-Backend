@@ -10,5 +10,5 @@ export interface IturfDetails extends Document{
     amenities:Array<string>;
     rules:Array<string>;
     price:number;
-    slots:string;
+    slots:Array<string>;
 }

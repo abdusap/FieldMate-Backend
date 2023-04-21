@@ -16,8 +16,20 @@ const turf_model_1 = __importDefault(require("../../models/turf.model"));
 class TurfRepository {
     allTurf() {
         return __awaiter(this, void 0, void 0, function* () {
-            const allTurf = yield turf_model_1.default.find();
+            const allTurf = yield turf_model_1.default.find({ verify: false });
             return allTurf;
+        });
+    }
+    acceptTurf(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const turf = yield turf_model_1.default.findOneAndUpdate({ _id: id }, { $set: { verify: true, verificationStatus: "approved" } });
+            return turf;
+        });
+    }
+    rejectTurf(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const turf = yield turf_model_1.default.findOneAndUpdate({ _id: id }, { $set: { verify: false, verificationStatus: "rejected" } });
+            return turf;
         });
     }
 }

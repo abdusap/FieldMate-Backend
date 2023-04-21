@@ -11,7 +11,7 @@ const turfDetailsSchema=new Schema<IturfDetails>({
     amenities:{type:[String]},
     rules:{type:[String]},
     price:{type:Number},
-    slots:{type:String}
+    slots:{type:[String]}
 
 })
 

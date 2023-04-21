@@ -18,3 +18,4 @@ exports.admin.post('/edit_location', location_controller_1.editLocation);
 exports.admin.post('/edit_sports', sports_controller_1.editSports);
 exports.admin.get('/all_turf', turf_controller_1.allTurf);
 exports.admin.patch('/accept_turf', turf_controller_1.acceptTurf);
+exports.admin.patch('/reject_turf', turf_controller_1.rejectTurf);

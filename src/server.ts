@@ -1,6 +1,7 @@
-// console.log('hainppffefe')
 import {user} from './routes/user.routes' 
+import dotenv from 'dotenv'
 
+dotenv.config()
 
 import express from 'express'
 const app=express()
@@ -13,7 +14,7 @@ mongodb()
 import cors from 'cors'
 app.use(
     cors({
-        origin:["http://localhost:3000","http://localhost:3001"],
+        origin:[process.env.CORS_URL as string],
         methods:["GET","POST","DELETE","PUT","PATCH"],
         credentials:true,
     })

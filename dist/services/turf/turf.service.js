@@ -28,5 +28,19 @@ class TurfService extends turf_repository_1.default {
             return turf;
         });
     }
+    Login(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const accountDetail = yield this.loginTurf(email);
+            if (accountDetail) {
+                const hashedPassword = accountDetail.password;
+                const matchPassword = yield bcrypt_1.default.compare(password, hashedPassword);
+                return {
+                    'matchStatus': matchPassword, 'account': accountDetail
+                };
+            }
+            else
+                return null;
+        });
+    }
 }
 exports.default = TurfService;

@@ -12,28 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const turf_model_1 = __importDefault(require("../../models/turf.model"));
-class TurfRepository {
-    createTurf(name, mobile, email, location, gioCoordinates, password) {
+const sports_repository_1 = __importDefault(require("../../repositories/admin/sports.repository"));
+const sportsRepo = new sports_repository_1.default();
+class SportsService {
+    AllSports() {
         return __awaiter(this, void 0, void 0, function* () {
-            const turf = new turf_model_1.default({ name, mobile, email, location, gioCoordinates, password });
-            yield turf.save();
-            return turf;
-        });
-    }
-    findTurf(email, mobile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const turf = yield turf_model_1.default.findOne({
-                $or: [{ email: email }, { mobile: mobile }]
-            });
-            return turf;
-        });
-    }
-    loginTurf(email) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const details = yield turf_model_1.default.findOne({ email: email });
-            return details;
+            const sports = yield sportsRepo.getAllSports();
+            return sports;
         });
     }
 }
-exports.default = TurfRepository;
+exports.default = SportsService;

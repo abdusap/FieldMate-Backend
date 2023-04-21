@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyOtp = exports.signup = void 0;
+exports.login = exports.verifyOtp = exports.signup = void 0;
 const turf_validation_1 = __importDefault(require("../../validation/turf.validation"));
 const turf_service_1 = __importDefault(require("../../services/turf/turf.service"));
 const error_1 = __importDefault(require("../../error/error"));
 const send_mail_1 = require("../../helper/send.mail");
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const turfService = new turf_service_1.default();
 exports.signup = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -50,5 +51,25 @@ exports.verifyOtp = (0, express_async_handler_1.default)((req, res) => __awaiter
     }
     else {
         throw new error_1.default(400, "Verification Failed");
+    }
+}));
+exports.login = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //       const authHeader = req.headers.authorization;
+    // console.log(authHeader);
+    const { email, password } = req.body;
+    const Turf = yield turfService.Login(email, password);
+    if (Turf != null) {
+        const { matchStatus, account } = Turf;
+        if (matchStatus == true) {
+            const token = jsonwebtoken_1.default.sign(JSON.parse(JSON.stringify(account)), "mysecretkey", { expiresIn: 86400 });
+            res.send({ success: true, token: token, account: account });
+        }
+        if (matchStatus == false) {
+            throw new error_1.default(401, "Email or Password Incorrect");
+            res.send({ success: false });
+        }
+    }
+    else {
+        throw new error_1.default(404, "Invalid Details");
     }
 }));

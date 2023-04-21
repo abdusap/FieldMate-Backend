@@ -51,7 +51,7 @@ export const signup=asyncHandler(async(req,res)=>{
       const {matchStatus,account}=Turf
       if(matchStatus==true){
         const token = jwt.sign(JSON.parse(JSON.stringify(account)), "mysecretkey", { expiresIn: 86400 });
-        res.send({success:true,token:token})
+        res.send({success:true,token:token,account:account})
       }
       if(matchStatus==false){
         throw new AppError(401,"Email or Password Incorrect")
