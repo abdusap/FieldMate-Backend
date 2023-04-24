@@ -8,6 +8,31 @@ import jwt from "jsonwebtoken";
 const turfService =new TurfService()
 
 
+export const jwtChecker=asyncHandler(async(req,res)=>{
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    const token = req.headers.authorization.split(" ")[1];
+    const checker:any=await turfService.JwtChecker(token)
+   if(checker!=null){
+          if(checker.status){
+            res.json({success: true});
+          }else{
+            throw new AppError(401, "your account has been blocked");
+          }
+   }else{
+    throw new AppError(401, "invalid token");
+   }
+  
+
+  }else {
+    throw new AppError(401, "No authorization");
+  } 
+})
+
+
+
 export const signup=asyncHandler(async(req,res)=>{ 
    try{ 
     const formData = req.body
@@ -50,7 +75,8 @@ export const signup=asyncHandler(async(req,res)=>{
       if(Turf!=null){
       const {matchStatus,account}=Turf
       if(matchStatus==true){
-        const token = jwt.sign(JSON.parse(JSON.stringify(account)), "mysecretkey", { expiresIn: 86400 });
+        const data={id:JSON.parse(JSON.stringify(account._id))}
+        const token = jwt.sign(data,process.env.JWT_SECRET as string, { expiresIn: 86400 });
         res.send({success:true,token:token,account:account})
       }
       if(matchStatus==false){

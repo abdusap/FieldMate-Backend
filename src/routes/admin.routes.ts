@@ -2,8 +2,11 @@ import express from 'express'
 import { addLocation, editLocation, findLocation, getLocationAndSports } from '../controllers/admin/location.controller'
 import { addSports, editSports, findSports } from '../controllers/admin/sports.controller'
 import { acceptTurf, allTurf, rejectTurf } from '../controllers/admin/turf.controller'
+import { login } from '../controllers/admin/auth.controller'
 
 export const admin =express.Router()
+
+admin.post('/login',login)
 
 admin.post('/location',addLocation)
 

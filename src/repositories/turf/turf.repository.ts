@@ -30,6 +30,10 @@ class TurfRepository{
         const details=await turfModel.findOne({email:email})
         return details
     }
+    async findTurfById(id:string):Promise<Iturf | null>{
+        const details=await turfModel.findById(id)
+        return details
+    }
 }
 
 export default TurfRepository

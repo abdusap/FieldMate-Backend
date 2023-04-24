@@ -11,6 +11,7 @@ const turfDetails_controller_1 = require("../controllers/turf/turfDetails.contro
 const multer_1 = __importDefault(require("../helper/multer"));
 const sports_controller_1 = require("../controllers/turf/sports.controller");
 exports.turf = express_1.default.Router();
+exports.turf.get('/jwt', turf_controller_1.jwtChecker);
 exports.turf.get('/all_location', location_controller_1.allLocation);
 exports.turf.post('/signup', turf_controller_1.signup);
 // turf.patch('/turf_exist',checkTurfDupe)
