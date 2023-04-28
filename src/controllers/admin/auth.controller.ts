@@ -19,3 +19,21 @@ export const login=asyncHandler(async(req,res)=>{
        throw new AppError(401,"Email or Password Incorrect")
     }
   })
+
+
+  export const jwtChecker=asyncHandler(async(req,res)=>{
+   if (
+     req.headers.authorization &&
+     req.headers.authorization.startsWith("Bearer")
+   ) {
+     const token = req.headers.authorization.split(" ")[1];
+     const checker:any=await AuthService.JwtChecker(token)
+    if(checker!=null){
+             res.json({success: true});
+    }else{
+     throw new AppError(401, "invalid token");
+    }
+   }else {
+     throw new AppError(401, "No authorization");
+   } 
+ })

@@ -8,7 +8,7 @@ const userSchema=new Schema<Iuser>({
     password: {type:String,required:true},
     gender: {type:String},
     image: {type:String},
-    status: {type:Boolean}
+    status: {type:Boolean,default:true}
 });
 
 export default model<Iuser>("User",userSchema)

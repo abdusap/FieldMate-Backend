@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editLocation = exports.findLocation = exports.getLocationAndSports = exports.addLocation = void 0;
+exports.BlockLocation = exports.editLocation = exports.findLocation = exports.getLocationAndSports = exports.addLocation = void 0;
 const location_service_1 = __importDefault(require("../../services/admin/location.service"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const error_1 = __importDefault(require("../../error/error"));
@@ -46,3 +46,10 @@ const editLocation = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     res.json({ data, success: true });
 });
 exports.editLocation = editLocation;
+exports.BlockLocation = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.query;
+    const data = yield locationService.BlockLocation(id);
+    if (data) {
+        res.send({ success: true });
+    }
+}));

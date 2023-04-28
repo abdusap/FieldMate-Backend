@@ -51,5 +51,11 @@ class LocationService extends location_repository_1.default {
             return data;
         });
     }
+    BlockLocation(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield this.blockLocation(id);
+            return details;
+        });
+    }
 }
 exports.default = LocationService;

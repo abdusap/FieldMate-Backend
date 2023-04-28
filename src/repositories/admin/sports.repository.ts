@@ -35,6 +35,16 @@ class SportsRepository{
         const sportsData=await sportsModel.find()
          return sportsData
     }
+    
+    async blockSports(id:string):Promise<ISports | null >{
+        const sports=await sportsModel.findByIdAndUpdate(
+               id ,
+               [{ $set: { status: { $not: ["$status"] } } }],
+              { new: true }
+          )
+          return sports      
+  }
+
 }
 
 export default SportsRepository

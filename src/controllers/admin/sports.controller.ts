@@ -38,4 +38,12 @@ export const addSports=asyncHandler(async(req,res)=>{
     // console.log(data)
     res.json({ data, success: true });
   };
+
+  export const BlockSports=asyncHandler(async(req,res)=>{ 
+    const { id}:any = req.query 
+    const data=await sportsService.BlockSports(id)
+    if(data){
+      res.send({success:true})
+    }
+  })
   

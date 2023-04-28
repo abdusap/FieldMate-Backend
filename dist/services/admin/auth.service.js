@@ -12,35 +12,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_repository_1 = __importDefault(require("../../repositories/user/user.repository"));
+const auth_repository_1 = __importDefault(require("../../repositories/admin/auth.repository"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-// const userRepository=new UserRepository()
-class UserService extends user_repository_1.default {
-    finduser(name, mobile, email) {
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const AuthRepository = new auth_repository_1.default();
+class authService {
+    login(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUserDupe = yield this.Finduser(email);
-            return checkUserDupe;
-        });
-    }
-    createUser(name, mobile, email, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-            const user = yield this.CreateUser(name, mobile, email, hashedPassword);
-            return user;
-        });
-    }
-    verifyUser(email, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.Finduser(email);
-            if (user) {
-                const hashedPassword = user.password;
+            const details = yield AuthRepository.Login(email);
+            if (details) {
+                const hashedPassword = details.password;
                 const matchPassword = yield bcrypt_1.default.compare(password, hashedPassword);
-                return { "matchPassword": matchPassword,
-                    "user": user };
+                return matchPassword;
             }
-            else
-                return user;
+            else {
+                return details;
+            }
+        });
+    }
+    JwtChecker(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+            if (decoded) {
+                const email = decoded.email;
+                const Data = yield AuthRepository.findOne(email);
+                return Data;
+            }
+            else {
+                const decode = false;
+                return decode;
+            }
         });
     }
 }
-exports.default = UserService;
+exports.default = authService;

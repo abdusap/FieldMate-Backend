@@ -14,7 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const turf_repository_1 = __importDefault(require("../../repositories/turf/turf.repository"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class TurfService extends turf_repository_1.default {
+    JwtChecker(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+            if (decoded) {
+                const id = decoded.id;
+                const turfData = yield this.findTurfById(id);
+                return turfData;
+            }
+            else {
+                const decode = false;
+                return decode;
+            }
+        });
+    }
     CreateTurf(name, mobile, email, location, gioCoordinates, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);

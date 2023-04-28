@@ -12,9 +12,7 @@ class LocationRepository{
     }
 
     async isLocationExist(name:string):Promise <Ilocation|null>{
-        const locationExist=await locationModel.findOne({name:name})
-        console.log(locationExist);
-        
+        const locationExist=await locationModel.findOne({name:name})        
         return locationExist
     }
      
@@ -33,6 +31,15 @@ class LocationRepository{
         const objectId=new ObjectId(id);
         const locationData=await locationModel.findByIdAndUpdate(objectId,{$set:{name:name}})
          return locationData
+    }
+
+    async blockLocation(id:string):Promise<Ilocation | null >{
+          const location=await locationModel.findByIdAndUpdate(
+                 id ,
+                 [{ $set: { status: { $not: ["$status"] } } }],
+                { new: true }
+            )
+            return location      
     }
     
 }

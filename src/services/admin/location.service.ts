@@ -33,6 +33,12 @@ class LocationService extends LocationRepository{
         const data=this.editLocation(id,name)
         return data
     }
+    
+    async BlockLocation(id:string):Promise<Ilocation | null>{
+        const details= await this.blockLocation(id)
+        return details
+    }
+
 
     // async GetAllLocation():Promise<object>{   
     //     const data=this.findAllLocation()

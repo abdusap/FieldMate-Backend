@@ -9,6 +9,8 @@ import {
 import jwt from "jsonwebtoken";
 import UserService from "../../services/user/user.service";
 import AppError from "../../error/error";
+import asyncHandler from "express-async-handler";
+
 
 
 const userService =new UserService()
@@ -58,36 +60,23 @@ export const login = async (
   next: NextFunction
 ) => {
   const { email, password } = req.body;
-  console.log(req.body);
-  // const authHeader = req.headers.authorization;
-  // console.log(authHeader);
-  const user = await userService.verifyUser(email, password);
-  console.log(user);
+  const user:any = await userService.verifyUser(email, password);
   if (user === null) {
     res.json({ message: "Invalid user" });
-  } else if (user === true) {
-    const token = jwt.sign(req.body, "mysecretkey", { expiresIn: 86400 });
+  } else if (user.matchPassword === true) {
+    const data={id:JSON.parse(JSON.stringify(user.user._id)),name:user.user.name}
+    const token = jwt.sign(data, "mysecretkey", { expiresIn: 86400 });
     console.log(token);
 
-    res.json({ verify: true, message: "true", token: token });
-  } else if (user === false) {
+    res.json({ verify: true, message: "true", token: token ,user:user.user});
+  } else if (user.matchPassword === false) {
     res.json({ verify: false, message: "Email or Password Incorrect" });
   } else {
     res.json({ message: "Invalid user" });
   }
 };
 
-export const test = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-     try{
-        console.log(req.body)
-        throw new AppError(400,'invalid id')
-     }catch(err:any){
-      console.log(err)
-      next(err)
-     }
-}
+
+
+
 

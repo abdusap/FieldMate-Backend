@@ -12,12 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.login = exports.verityOtp = exports.signup = void 0;
+exports.login = exports.verityOtp = exports.signup = void 0;
 const user_validation_1 = __importDefault(require("../../validation/user.validation"));
 const twilio_1 = require("../../config/twilio");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_service_1 = __importDefault(require("../../services/user/user.service"));
-const error_1 = __importDefault(require("../../error/error"));
 const userService = new user_service_1.default();
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const formData = req.body;
@@ -52,20 +51,17 @@ const verityOtp = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 exports.verityOtp = verityOtp;
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    console.log(req.body);
-    // const authHeader = req.headers.authorization;
-    // console.log(authHeader);
     const user = yield userService.verifyUser(email, password);
-    console.log(user);
     if (user === null) {
         res.json({ message: "Invalid user" });
     }
-    else if (user === true) {
-        const token = jsonwebtoken_1.default.sign(req.body, "mysecretkey", { expiresIn: 86400 });
+    else if (user.matchPassword === true) {
+        const data = { id: JSON.parse(JSON.stringify(user.user._id)), name: user.user.name };
+        const token = jsonwebtoken_1.default.sign(data, "mysecretkey", { expiresIn: 86400 });
         console.log(token);
-        res.json({ verify: true, message: "true", token: token });
+        res.json({ verify: true, message: "true", token: token, user: user.user });
     }
-    else if (user === false) {
+    else if (user.matchPassword === false) {
         res.json({ verify: false, message: "Email or Password Incorrect" });
     }
     else {
@@ -73,14 +69,3 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
-const test = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        console.log(req.body);
-        throw new error_1.default(400, 'invalid id');
-    }
-    catch (err) {
-        console.log(err);
-        next(err);
-    }
-});
-exports.test = test;

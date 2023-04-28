@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editSports = exports.findSports = exports.addSports = void 0;
+exports.BlockSports = exports.editSports = exports.findSports = exports.addSports = void 0;
 const sports_service_1 = __importDefault(require("../../services/admin/sports.service"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const error_1 = __importDefault(require("../../error/error"));
@@ -40,3 +40,10 @@ const editSports = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     res.json({ data, success: true });
 });
 exports.editSports = editSports;
+exports.BlockSports = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.query;
+    const data = yield sportsService.BlockSports(id);
+    if (data) {
+        res.send({ success: true });
+    }
+}));

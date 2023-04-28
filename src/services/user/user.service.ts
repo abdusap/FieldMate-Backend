@@ -13,12 +13,13 @@ class UserService extends UserRepository{
         const user=await this.CreateUser(name,mobile,email,hashedPassword)
         return user
     }
-    async verifyUser(email:string,password:string):Promise<boolean|null>{
+    async verifyUser(email:string,password:string):Promise<boolean|null |object>{
         const user:Iuser|null=await this.Finduser(email)
             if(user){
                 const hashedPassword:string=user.password
                 const matchPassword:boolean=await bcrypt.compare(password,hashedPassword)
-                return matchPassword
+                return {"matchPassword":matchPassword,
+                         "user":user }
             }   
         else
         return user 

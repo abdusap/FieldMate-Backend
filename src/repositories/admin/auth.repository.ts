@@ -8,6 +8,10 @@ async Login(email:string):Promise<Iadmin | null>{
     return details
 }
 
+async findOne(email:string):Promise<Iadmin | null>{
+    const details=await adminModel.findOne({email})
+    return details
+}
 
 }
 

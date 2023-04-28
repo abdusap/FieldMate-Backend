@@ -8,6 +8,6 @@ const userSchema = new mongoose_1.Schema({
     password: { type: String, required: true },
     gender: { type: String },
     image: { type: String },
-    status: { type: Boolean }
+    status: { type: Boolean, default: true }
 });
 exports.default = (0, mongoose_1.model)("User", userSchema);

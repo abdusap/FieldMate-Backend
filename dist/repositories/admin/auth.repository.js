@@ -12,34 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const turf_model_1 = __importDefault(require("../../models/turf.model"));
-class TurfRepository {
-    createTurf(name, mobile, email, location, gioCoordinates, password) {
+const admin_model_1 = __importDefault(require("../../models/admin.model"));
+class authRepository {
+    Login(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const turf = new turf_model_1.default({ name, mobile, email, location, gioCoordinates, password });
-            yield turf.save();
-            return turf;
-        });
-    }
-    findTurf(email, mobile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const turf = yield turf_model_1.default.findOne({
-                $or: [{ email: email }, { mobile: mobile }]
-            });
-            return turf;
-        });
-    }
-    loginTurf(email) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const details = yield turf_model_1.default.findOne({ email: email });
+            const details = yield admin_model_1.default.findOne({ email: email });
             return details;
         });
     }
-    findTurfById(id) {
+    findOne(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = yield turf_model_1.default.findById(id);
+            const details = yield admin_model_1.default.findOne({ email });
             return details;
         });
     }
 }
-exports.default = TurfRepository;
+exports.default = authRepository;

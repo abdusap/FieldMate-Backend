@@ -50,3 +50,13 @@ import AppError from "../../error/error";
     // console.log(data)
     res.json({ data, success: true });
   };
+
+ 
+
+  export const BlockLocation=asyncHandler(async(req,res)=>{ 
+    const { id}:any = req.query 
+    const data=await locationService.BlockLocation(id)
+    if(data){
+      res.send({success:true})
+    }
+  })

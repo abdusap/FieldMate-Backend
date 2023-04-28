@@ -1,6 +1,7 @@
 import { Iadmin } from "../../interface/admin.interface"
 import authRepository from "../../repositories/admin/auth.repository"
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const AuthRepository=new authRepository()
 class authService{
@@ -14,6 +15,18 @@ class authService{
         }else{
            return details
         }
+    }
+
+    async JwtChecker(token:string):Promise<any>{
+        const decoded:any = jwt.verify(token, process.env.JWT_SECRET as string);
+        if(decoded){
+            const email=decoded.email
+            const Data=await AuthRepository.findOne(email)
+            return Data 
+          }else{
+            const decode=false
+            return decode
+          }
     }
 
 

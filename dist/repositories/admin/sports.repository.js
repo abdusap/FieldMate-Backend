@@ -52,5 +52,11 @@ class SportsRepository {
             return sportsData;
         });
     }
+    blockSports(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sports = yield sports_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
+            return sports;
+        });
+    }
 }
 exports.default = SportsRepository;

@@ -26,6 +26,12 @@ class SportsService extends SportsRepository{
         const data=this.editSports(id,name)
         return data
     }
+     
+    async BlockSports(id:string):Promise<ISports | null>{
+        const details= await this.blockSports(id)
+        return details
+    }
+
 }
 
 export default SportsService

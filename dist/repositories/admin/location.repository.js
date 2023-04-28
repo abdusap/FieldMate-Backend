@@ -25,7 +25,6 @@ class LocationRepository {
     isLocationExist(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const locationExist = yield location_model_1.default.findOne({ name: name });
-            console.log(locationExist);
             return locationExist;
         });
     }
@@ -47,6 +46,12 @@ class LocationRepository {
             const objectId = new mongodb_1.ObjectId(id);
             const locationData = yield location_model_1.default.findByIdAndUpdate(objectId, { $set: { name: name } });
             return locationData;
+        });
+    }
+    blockLocation(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const location = yield location_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
+            return location;
         });
     }
 }
