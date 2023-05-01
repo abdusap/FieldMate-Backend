@@ -13,6 +13,7 @@ async findOne(email:string):Promise<Iadmin | null>{
     return details
 }
 
+
 }
 
 export default authRepository

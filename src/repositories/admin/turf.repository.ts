@@ -16,5 +16,20 @@ class TurfRepository{
         const turf=await turfModel.findOneAndUpdate({_id:id},{$set:{verify:false,verificationStatus:"rejected"}})
         return turf
     }
+
+    async getAllTurf():Promise <any>{
+        const allTurf=await turfModel.find()
+        return allTurf
+    }
+
+    async blockUser(id:string):Promise<Iturf | null >{
+        const user=await turfModel.findByIdAndUpdate(
+               id ,
+               [{ $set: { status: { $not: ["$status"] } } }],
+              { new: true }
+          )
+          return user      
+  }
+
 }
 export default TurfRepository

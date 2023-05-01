@@ -26,6 +26,16 @@ class turfService extends TurfRepository{
             return turf
         })
     }
+
+    async GetAllTurf():Promise<any>{
+        const allTurf=await this.getAllTurf()
+        return allTurf
+    }
+
+    async BlockTurf(id:string):Promise<object | null>{
+        const details=await this.blockUser(id)
+        return details
+    }
 }
 
 export default turfService

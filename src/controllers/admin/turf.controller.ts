@@ -16,7 +16,18 @@ export const acceptTurf=asyncHandler(async(req,res)=>{
 
 export const rejectTurf=asyncHandler(async(req,res)=>{ 
         const id:any=req.query.id
-        const turfDetails=await TurfService.RejectTurf(id)
+        await TurfService.RejectTurf(id)
         res.send({success:true})
 })
+
+export const getAllTurf=asyncHandler(async(req,res)=>{ 
+        const allTurf=await TurfService.GetAllTurf()
+       res.send({allTurf})
+})
+
+export const blockTurf=asyncHandler(async(req,res)=>{ 
+        const id:any=req.query.id
+    await TurfService.BlockTurf(id)
+    res.send({success:true})
+    })
 
