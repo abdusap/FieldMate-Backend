@@ -9,6 +9,7 @@ const location_controller_1 = require("../controllers/admin/location.controller"
 const sports_controller_1 = require("../controllers/admin/sports.controller");
 const turf_controller_1 = require("../controllers/admin/turf.controller");
 const auth_controller_1 = require("../controllers/admin/auth.controller");
+const user_controller_1 = require("../controllers/admin/user.controller");
 exports.admin = express_1.default.Router();
 exports.admin.post('/login', auth_controller_1.login);
 exports.admin.get('/jwt', auth_controller_1.jwtChecker);
@@ -24,3 +25,7 @@ exports.admin.patch('/accept_turf', turf_controller_1.acceptTurf);
 exports.admin.patch('/reject_turf', turf_controller_1.rejectTurf);
 exports.admin.patch('/block_location', location_controller_1.BlockLocation);
 exports.admin.patch('/block_sports', sports_controller_1.BlockSports);
+exports.admin.get('/all_user', user_controller_1.AllUser);
+exports.admin.post('/all_turf', turf_controller_1.getAllTurf);
+exports.admin.patch('/block_user', user_controller_1.blockUser);
+exports.admin.patch('/block_turf', turf_controller_1.blockTurf);

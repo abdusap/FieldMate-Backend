@@ -5,6 +5,7 @@ const userSchema=new Schema<Iuser>({
     name: {type:String,required:true},
     mobile: {type:Number,required:true},
     email: {type:String,required:true},
+    wallet:{type:Number,default:0},
     password: {type:String,required:true},
     gender: {type:String},
     image: {type:String},

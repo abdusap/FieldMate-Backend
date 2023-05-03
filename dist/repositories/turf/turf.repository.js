@@ -41,5 +41,11 @@ class TurfRepository {
             return details;
         });
     }
+    turfDetails(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield turf_model_1.default.findById(id);
+            return details;
+        });
+    }
 }
 exports.default = TurfRepository;

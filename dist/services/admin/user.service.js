@@ -12,26 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = __importDefault(require("../../models/user.model"));
-class UserRepository {
-    CreateUser(name, mobile, email, password) {
+const user_repository_1 = __importDefault(require("../../repositories/admin/user.repository"));
+class UserService extends user_repository_1.default {
+    GetAllUser() {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = new user_model_1.default({ name, mobile, email, password });
-            yield user.save();
-            return user;
+            const details = yield this.getAllUser();
+            return details;
         });
     }
-    Finduser(email) {
+    BlockUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findOne({ email: email });
-            return user;
-        });
-    }
-    Getuser(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findById(id);
-            return user;
+            const details = yield this.blockUser(id);
+            return details;
         });
     }
 }
-exports.default = UserRepository;
+exports.default = UserService;

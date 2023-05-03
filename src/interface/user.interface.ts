@@ -10,6 +10,7 @@ export interface Iuser extends Document{
     name: string;
     mobile: number;
     email: string;
+    wallet:number;
     password: string;
     confirmPassword: string;
     gender: Gender,

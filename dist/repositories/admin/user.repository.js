@@ -14,22 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../../models/user.model"));
 class UserRepository {
-    CreateUser(name, mobile, email, password) {
+    getAllUser() {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = new user_model_1.default({ name, mobile, email, password });
-            yield user.save();
-            return user;
+            const details = yield user_model_1.default.find();
+            return details;
         });
     }
-    Finduser(email) {
+    blockUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findOne({ email: email });
-            return user;
-        });
-    }
-    Getuser(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findById(id);
+            const user = yield user_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
             return user;
         });
     }

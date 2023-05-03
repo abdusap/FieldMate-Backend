@@ -12,37 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const turf_model_1 = __importDefault(require("../../models/turf.model"));
-class TurfRepository {
-    allTurf() {
+const slotBooking_repository_1 = __importDefault(require("../../repositories/user/slotBooking.repository"));
+class SlotBookingService extends slotBooking_repository_1.default {
+    bookSlot(userId, turfId, date, slots, sports, total, walletAmount) {
         return __awaiter(this, void 0, void 0, function* () {
-            const allTurf = yield turf_model_1.default.find({ verify: false });
-            return allTurf;
+            const data = yield this.bookSlotWallet(userId, turfId, date, slots, sports, total, walletAmount);
+            return data;
         });
     }
-    acceptTurf(id) {
+    BookSlotPayment(userId, turfId, date, slots, sports, total, paymentAmount) {
         return __awaiter(this, void 0, void 0, function* () {
-            const turf = yield turf_model_1.default.findOneAndUpdate({ _id: id }, { $set: { verify: true, verificationStatus: "approved" } });
-            return turf;
+            const data = yield this.bookSlotPayment(userId, turfId, date, slots, sports, total, paymentAmount);
+            return data;
         });
     }
-    rejectTurf(id) {
+    BookSlotPaymentAndWallet(userId, turfId, date, slots, sports, total, walletAmount, paymentAmount) {
         return __awaiter(this, void 0, void 0, function* () {
-            const turf = yield turf_model_1.default.findOneAndUpdate({ _id: id }, { $set: { verify: false, verificationStatus: "rejected" } });
-            return turf;
-        });
-    }
-    getAllTurf() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const allTurf = yield turf_model_1.default.find();
-            return allTurf;
-        });
-    }
-    blockUser(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield turf_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
-            return user;
+            const data = yield this.bookSlotPaymentAndWallet(userId, turfId, date, slots, sports, total, walletAmount, paymentAmount);
+            return data;
         });
     }
 }
-exports.default = TurfRepository;
+exports.default = SlotBookingService;

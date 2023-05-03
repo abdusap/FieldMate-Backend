@@ -18,7 +18,11 @@ class UserRepository{
 
     async Finduser(email:string):Promise <null | Iuser> {
     const user =await userModel.findOne({email:email});
-    console.log(user)
+    return user
+    }
+
+    async Getuser(id:string):Promise <null | Iuser> {
+    const user =await userModel.findById(id);
     return user
     }
 }

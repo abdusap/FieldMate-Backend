@@ -27,3 +27,32 @@ export const allLocationAndSports=asyncHandler(async(req,res)=>{
       
       res.send({turf:turf[0],turfDetails:turfDetails[0]})
     })
+
+    export const availableSports=asyncHandler(async(req,res)=>{
+      const id:any=req.query.id
+      const sports=await turfService.AvailableSports(id)
+      // console.log(sports);
+      res.send({sports})
+    })
+
+    export const availableSlots=asyncHandler(async(req,res)=>{
+      const {turfId,sports,date}:any=req.query
+console.log(turfId);
+console.log(sports);
+console.log(date);
+const slots=await turfService.AvailableSlots(turfId,sports,date)
+const bookedSlots=slots.bookedSlots
+const allSlots=slots.allSlots.slots
+if(bookedSlots.length==0){
+     res.send({allSlots,allSlot:true})
+}else{
+  console.log(bookedSlots);
+  const BookedSlots:Array<string>=[]
+  bookedSlots.forEach((element:any)=> {
+    element.slots.forEach((data:string)=>{
+      BookedSlots.push(data)
+    })
+  });
+  res.send({allSlots,BookedSlots,bookedSlot:true})
+}
+    })

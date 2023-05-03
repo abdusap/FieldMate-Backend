@@ -10,10 +10,17 @@ import jwt from "jsonwebtoken";
 import UserService from "../../services/user/user.service";
 import AppError from "../../error/error";
 import asyncHandler from "express-async-handler";
+import Razorpay from "razorpay";
+import dotenv from 'dotenv';
+dotenv.config();
+import crypto from "crypto"
+import SlotBookingService from "../../services/user/slotBooking.service";
+
 
 
 
 const userService =new UserService()
+const slotBookingService=new SlotBookingService()
 
 export const signup = async (
   req: Request,
@@ -76,7 +83,119 @@ export const login = async (
   }
 };
 
+// export const orders=asyncHandler(async(req: Request,
+//   res: Response,
+//   next: NextFunction)=>{
+//   // console.log(req.body)
+//   const instance = new Razorpay({
+//     key_id: "rzp_test_pTxoFkiwXZuGgu",
+//     key_secret: "vkkGHlCnqiN6bVNmgfhctjnl",
+// });
+
+// const options = {
+//     amount: 50000, // amount in smallest currency unit
+//     currency: "INR",
+//     receipt: "receipt_order_74394",
+// };
+
+// const order = await instance.orders.create(options);
+
+// if (!order) return res.status(500).send("Some error occured");
+
+// res.json(order);
+// })
 
 
+export const orders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try{
+const amount:any=req.query.amount
+parseInt(amount)
+    const instance = new Razorpay({
+      key_id: process.env.KEYID as string,
+    key_secret: process.env.KEYSECRET as string,
+});
+
+const options = {
+    amount: amount*100, // amount in smallest currency unit
+    currency: "INR",
+    receipt: "receipt_order_74394",
+};
+console.log(options);
+const order = await instance.orders.create(options);
+
+if (!order) return res.status(500).send("Some error occured");
+
+res.json(order);
+}catch{
+  next()
+}
+}
+
+export const paymentSuccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // getting the details back from our font-end
+    const {
+        orderCreationId,
+        razorpayPaymentId,
+        razorpayOrderId,
+        razorpaySignature,
+    } = req.body;
+
+    // Creating our own digest
+    // The format should be like this:
+    // digest = hmac_sha256(orderCreationId + "|" + razorpayPaymentId, secret);
+    const signature = crypto
+    .createHmac("sha256", process.env.KEYSECRET as string)
+    .update(`${orderCreationId}|${razorpayPaymentId}`)
+    .digest("hex");
+    // comaparing our digest with the actual signature
+    if (signature !== razorpaySignature)
+        return res.status(400).json({ msg: "Transaction not legit!" });
+
+    // THE PAYMENT IS LEGIT & VERIFIED
+    // YOU CAN SAVE THE DETAILS IN YOUR DATABASE IF YOU WANT
+
+    res.json({
+        msg: "success",
+        orderId: razorpayOrderId,
+        paymentId: razorpayPaymentId,
+    });
+} catch (err) {
+    next(err)
+}
+}
 
 
+export const getWalletAndPrice=asyncHandler(async(req,res)=>{
+  const {userId,turfId}:any=req.query
+  const details=await userService.getWalletAndPrice(turfId,userId)
+  const wallet=details.user.wallet
+  const slotPrice=details.slotPrice.price
+  res.send({wallet,slotPrice})
+})
+
+export const bookSlot=asyncHandler(async(req,res)=>{
+const {userId,turfId,date,slots,sportsId,total,walletUsed,paymentAmount}=req.body
+console.log(req.body);
+if('walletUsed' in req.body && 'paymentAmount' in req.body){
+  await slotBookingService.BookSlotPaymentAndWallet(userId,turfId,date,slots,sportsId,total,walletUsed,paymentAmount)
+  res.send({success:true})
+}
+if ('walletUsed' in req.body){
+  await slotBookingService.bookSlot(userId,turfId,date,slots,sportsId,total,walletUsed)
+  res.send({success:true})
+}
+if ('paymentAmount' in req.body){
+  await slotBookingService.BookSlotPayment(userId,turfId,date,slots,sportsId,total,paymentAmount)
+  res.send({success:true})
+}
+
+})

@@ -1,3 +1,5 @@
+import { IturfDetails } from "../../interface/turfDetails.interface";
+import slotBookingModel from "../../models/slotBooking.model";
 import turfModel from "../../models/turf.model"
 import turfDetailsModel from "../../models/turfDetails.model"
 import { Types } from 'mongoose';
@@ -105,5 +107,41 @@ class TurfRepository{
         return data
     }
 
+    async availableSports(id:string):Promise<object>{
+        const sports = await turfDetailsModel.aggregate([
+            {
+                $match:{
+                    turfId:new Types.ObjectId(id)
+                }
+            },
+            {
+                $lookup: {
+                  from: "sports",
+                  localField: "sports",
+                  foreignField: "_id",
+                  as: "sportsDetails"
+                }
+              },
+              {
+                $unwind: "$sportsDetails"
+              },
+              {
+                $project: {
+                  _id: 0,
+                //   "sportsDetails.name": 1
+                name:"$sportsDetails.name",
+                id:"$sportsDetails._id",
+                }
+              }
+        ])
+        return sports
+    }
+    async getSlots(turfId:string):Promise<IturfDetails |null>{
+    const data=await turfDetailsModel.findOne({turfId:turfId})
+    return data
+    }
+
+
+   
 }
 export default TurfRepository

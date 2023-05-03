@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_repository_1 = __importDefault(require("../../repositories/user/user.repository"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const turf_repository_1 = __importDefault(require("../../repositories/user/turf.repository"));
 // const userRepository=new UserRepository()
+const turfRepository = new turf_repository_1.default();
 class UserService extends user_repository_1.default {
     finduser(name, mobile, email) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -40,6 +42,16 @@ class UserService extends user_repository_1.default {
             }
             else
                 return user;
+        });
+    }
+    getWalletAndPrice(turfId, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const wallet = yield this.Getuser(userId);
+            const slotPrice = yield turfRepository.getSlots(turfId);
+            return {
+                "user": wallet,
+                "slotPrice": slotPrice
+            };
         });
     }
 }

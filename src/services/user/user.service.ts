@@ -1,8 +1,10 @@
 import UserRepository from "../../repositories/user/user.repository";
 import bcrypt from "bcrypt";
 import { Iuser } from "../../interface/user.interface";
+import TurfRepository from "../../repositories/user/turf.repository";
 
 // const userRepository=new UserRepository()
+const turfRepository=new TurfRepository()
 class UserService extends UserRepository{
     async finduser(name:string, mobile:number,email:string):Promise<Iuser|null>{
         const checkUserDupe=await this.Finduser(email)
@@ -24,6 +26,17 @@ class UserService extends UserRepository{
         else
         return user 
 }
+
+    async getWalletAndPrice(turfId:string,userId:string):Promise<object | any>{
+        const wallet=await this.Getuser(userId)
+        const slotPrice=await turfRepository.getSlots(turfId)
+        return {
+            "user":wallet,
+            "slotPrice":slotPrice
+        }
+    }
+
+
 }
 
 export default UserService
