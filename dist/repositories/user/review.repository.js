@@ -12,25 +12,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = __importDefault(require("../../models/user.model"));
-class UserRepository {
-    getAllUser() {
+const review_model_1 = __importDefault(require("../../models/review.model"));
+class ReviewRepository {
+    addReview(turfId, userId, title, rating, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = yield user_model_1.default.find();
+            const date = new Date();
+            const review = new review_model_1.default({
+                turfId,
+                userId,
+                title,
+                rating,
+                message,
+                date
+            });
+            review.save();
+            return review;
+        });
+    }
+    allReview(turfId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield review_model_1.default.find({ turfId });
             return details;
         });
     }
-    blockUser(id) {
+    reviewCount(turfId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
-            return user;
-        });
-    }
-    usersCount() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const count = yield user_model_1.default.count();
+            const count = yield review_model_1.default.count({ turfId: turfId });
             return count;
         });
     }
 }
-exports.default = UserRepository;
+exports.default = ReviewRepository;

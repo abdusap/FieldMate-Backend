@@ -18,5 +18,10 @@ class UserRepository{
           return user      
   }
 
+  async usersCount():Promise<number | null>{
+    const count=await userModel.count()
+    return count
+}
+
 }
 export default UserRepository

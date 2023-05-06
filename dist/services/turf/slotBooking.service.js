@@ -12,25 +12,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = __importDefault(require("../../models/user.model"));
-class UserRepository {
-    getAllUser() {
+const slotBooking_repository_1 = __importDefault(require("../../repositories/turf/slotBooking.repository"));
+const review_repository_1 = __importDefault(require("../../repositories/user/review.repository"));
+const reviewRepository = new review_repository_1.default();
+class SlotBookingService extends slotBooking_repository_1.default {
+    AllSlotBooking(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = yield user_model_1.default.find();
+            const details = yield this.allSlotBooking(id);
             return details;
         });
     }
-    blockUser(id) {
+    CancelSlot(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
-            return user;
+            const details = yield this.cancelSlot(id);
+            return details;
         });
     }
-    usersCount() {
+    SlotDetails(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const count = yield user_model_1.default.count();
-            return count;
+            const details = yield this.slotDetails(id);
+            return details;
+        });
+    }
+    GetAllSlotBooking(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield this.getAllSlotBooking(id);
+            const reviewCount = yield reviewRepository.reviewCount(id);
+            return {
+                "slotBooking": details,
+                "reviewCount": reviewCount
+            };
         });
     }
 }
-exports.default = UserRepository;
+exports.default = SlotBookingService;

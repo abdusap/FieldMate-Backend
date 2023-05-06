@@ -3,7 +3,7 @@ import { BlockLocation, addLocation, editLocation, findLocation, getLocationAndS
 import { BlockSports, addSports, editSports, findSports } from '../controllers/admin/sports.controller'
 import { acceptTurf, allTurf, blockTurf, getAllTurf, rejectTurf } from '../controllers/admin/turf.controller'
 import { jwtChecker, login } from '../controllers/admin/auth.controller'
-import { AllUser, blockUser } from '../controllers/admin/user.controller'
+import { AllUser, blockUser, dashboardData } from '../controllers/admin/user.controller'
 
 export const admin =express.Router()
 
@@ -42,4 +42,6 @@ admin.post('/all_turf',getAllTurf)
 admin.patch('/block_user',blockUser)
 
 admin.patch('/block_turf',blockTurf)
+
+admin.get('/dashboard_details',dashboardData)
 

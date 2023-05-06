@@ -4,6 +4,8 @@ import { jwtChecker, login, signup, verifyOtp } from "../controllers/turf/turf.c
 import { addAmenity, addRules, addSlot, details, getSlot } from "../controllers/turf/turfDetails.controller";
 import uploadCloudinary from "../helper/multer";
 import { getAllSportsAndDetails } from "../controllers/turf/sports.controller";
+import { cancelSlot, dashboardDetails, getSlotBooking, slotDetails } from "../controllers/turf/slotBooking.controller";
+import { allReview } from "../controllers/turf/review.controller";
 
 
 export const turf=express.Router()
@@ -32,3 +34,13 @@ turf.post('/login',login)
 turf.post('/add_slot',addSlot)
 
 turf.get('/get_slot',getSlot)
+
+turf.get('/get_slot_booking',getSlotBooking)
+
+turf.patch('/cancel_slot',cancelSlot)
+
+turf.patch('/slot_details',slotDetails)
+
+turf.get('/all_review',allReview)
+
+turf.get('/dashboard_details',dashboardDetails)

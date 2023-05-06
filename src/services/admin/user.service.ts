@@ -1,5 +1,6 @@
+import TurfRepository from "../../repositories/admin/turf.repository"
 import UserRepository from "../../repositories/admin/user.repository"
-
+const turfRepository=new TurfRepository()
 class UserService extends UserRepository{
 
     async GetAllUser():Promise<object | null>{
@@ -12,6 +13,15 @@ class UserService extends UserRepository{
         return details
     }
 
+    async DashboardDetails():Promise<object | null>{
+        const usersCount=await this.usersCount()
+        const turfDetails=await turfRepository.getAllTurf()
+        return {
+             "userCount":usersCount,
+             "turfDetails":turfDetails
+        }
+    }
+    
 
 
 

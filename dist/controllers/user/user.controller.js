@@ -65,7 +65,6 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     else if (user.matchPassword === true) {
         const data = { id: JSON.parse(JSON.stringify(user.user._id)), name: user.user.name };
         const token = jsonwebtoken_1.default.sign(data, "mysecretkey", { expiresIn: 86400 });
-        console.log(token);
         res.json({ verify: true, message: "true", token: token, user: user.user });
     }
     else if (user.matchPassword === false) {
@@ -76,23 +75,6 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
-// export const orders=asyncHandler(async(req: Request,
-//   res: Response,
-//   next: NextFunction)=>{
-//   // console.log(req.body)
-//   const instance = new Razorpay({
-//     key_id: "rzp_test_pTxoFkiwXZuGgu",
-//     key_secret: "vkkGHlCnqiN6bVNmgfhctjnl",
-// });
-// const options = {
-//     amount: 50000, // amount in smallest currency unit
-//     currency: "INR",
-//     receipt: "receipt_order_74394",
-// };
-// const order = await instance.orders.create(options);
-// if (!order) return res.status(500).send("Some error occured");
-// res.json(order);
-// })
 const orders = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const amount = req.query.amount;
@@ -119,20 +101,13 @@ const orders = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 exports.orders = orders;
 const paymentSuccess = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // getting the details back from our font-end
         const { orderCreationId, razorpayPaymentId, razorpayOrderId, razorpaySignature, } = req.body;
-        // Creating our own digest
-        // The format should be like this:
-        // digest = hmac_sha256(orderCreationId + "|" + razorpayPaymentId, secret);
         const signature = crypto_1.default
             .createHmac("sha256", process.env.KEYSECRET)
             .update(`${orderCreationId}|${razorpayPaymentId}`)
             .digest("hex");
-        // comaparing our digest with the actual signature
         if (signature !== razorpaySignature)
             return res.status(400).json({ msg: "Transaction not legit!" });
-        // THE PAYMENT IS LEGIT & VERIFIED
-        // YOU CAN SAVE THE DETAILS IN YOUR DATABASE IF YOU WANT
         res.json({
             msg: "success",
             orderId: razorpayOrderId,
@@ -153,7 +128,6 @@ exports.getWalletAndPrice = (0, express_async_handler_1.default)((req, res) => _
 }));
 exports.bookSlot = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, turfId, date, slots, sportsId, total, walletUsed, paymentAmount } = req.body;
-    console.log(req.body);
     if ('walletUsed' in req.body && 'paymentAmount' in req.body) {
         yield slotBookingService.BookSlotPaymentAndWallet(userId, turfId, date, slots, sportsId, total, walletUsed, paymentAmount);
         res.send({ success: true });

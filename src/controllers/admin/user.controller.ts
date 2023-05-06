@@ -13,3 +13,11 @@ export const blockUser=asyncHandler(async(req,res)=>{
 await userService.BlockUser(id)
 res.send({success:true})
 })
+
+
+export const dashboardData=asyncHandler(async(req,res)=>{
+     const details:any=await userService.DashboardDetails()
+     const userCount=details.userCount
+     const turfDetails=details.turfDetails
+     res.send({userCount,turfDetails})
+})

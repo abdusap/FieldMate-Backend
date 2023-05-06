@@ -29,3 +29,4 @@ exports.admin.get('/all_user', user_controller_1.AllUser);
 exports.admin.post('/all_turf', turf_controller_1.getAllTurf);
 exports.admin.patch('/block_user', user_controller_1.blockUser);
 exports.admin.patch('/block_turf', turf_controller_1.blockTurf);
+exports.admin.get('/dashboard_details', user_controller_1.dashboardData);

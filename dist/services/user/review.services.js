@@ -12,25 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = __importDefault(require("../../models/user.model"));
-class UserRepository {
-    getAllUser() {
+const review_repository_1 = __importDefault(require("../../repositories/user/review.repository"));
+class ReviewService extends review_repository_1.default {
+    AddReview(turfId, userId, title, rating, message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = yield user_model_1.default.find();
+            const details = yield this.addReview(turfId, userId, title, rating, message);
             return details;
         });
     }
-    blockUser(id) {
+    AllReview(turfId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield user_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
-            return user;
-        });
-    }
-    usersCount() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const count = yield user_model_1.default.count();
-            return count;
+            const details = yield this.allReview(turfId);
+            return details;
         });
     }
 }
-exports.default = UserRepository;
+exports.default = ReviewService;

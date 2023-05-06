@@ -73,7 +73,6 @@ export const login = async (
   } else if (user.matchPassword === true) {
     const data={id:JSON.parse(JSON.stringify(user.user._id)),name:user.user.name}
     const token = jwt.sign(data, "mysecretkey", { expiresIn: 86400 });
-    console.log(token);
 
     res.json({ verify: true, message: "true", token: token ,user:user.user});
   } else if (user.matchPassword === false) {
@@ -83,27 +82,6 @@ export const login = async (
   }
 };
 
-// export const orders=asyncHandler(async(req: Request,
-//   res: Response,
-//   next: NextFunction)=>{
-//   // console.log(req.body)
-//   const instance = new Razorpay({
-//     key_id: "rzp_test_pTxoFkiwXZuGgu",
-//     key_secret: "vkkGHlCnqiN6bVNmgfhctjnl",
-// });
-
-// const options = {
-//     amount: 50000, // amount in smallest currency unit
-//     currency: "INR",
-//     receipt: "receipt_order_74394",
-// };
-
-// const order = await instance.orders.create(options);
-
-// if (!order) return res.status(500).send("Some error occured");
-
-// res.json(order);
-// })
 
 
 export const orders = async (
@@ -120,7 +98,7 @@ parseInt(amount)
 });
 
 const options = {
-    amount: amount*100, // amount in smallest currency unit
+    amount: amount*100, 
     currency: "INR",
     receipt: "receipt_order_74394",
 };
@@ -141,7 +119,6 @@ export const paymentSuccess = async (
   next: NextFunction
 ) => {
   try {
-    // getting the details back from our font-end
     const {
         orderCreationId,
         razorpayPaymentId,
@@ -149,19 +126,14 @@ export const paymentSuccess = async (
         razorpaySignature,
     } = req.body;
 
-    // Creating our own digest
-    // The format should be like this:
-    // digest = hmac_sha256(orderCreationId + "|" + razorpayPaymentId, secret);
     const signature = crypto
     .createHmac("sha256", process.env.KEYSECRET as string)
     .update(`${orderCreationId}|${razorpayPaymentId}`)
     .digest("hex");
-    // comaparing our digest with the actual signature
     if (signature !== razorpaySignature)
         return res.status(400).json({ msg: "Transaction not legit!" });
 
-    // THE PAYMENT IS LEGIT & VERIFIED
-    // YOU CAN SAVE THE DETAILS IN YOUR DATABASE IF YOU WANT
+   
 
     res.json({
         msg: "success",
@@ -184,7 +156,6 @@ export const getWalletAndPrice=asyncHandler(async(req,res)=>{
 
 export const bookSlot=asyncHandler(async(req,res)=>{
 const {userId,turfId,date,slots,sportsId,total,walletUsed,paymentAmount}=req.body
-console.log(req.body);
 if('walletUsed' in req.body && 'paymentAmount' in req.body){
   await slotBookingService.BookSlotPaymentAndWallet(userId,turfId,date,slots,sportsId,total,walletUsed,paymentAmount)
   res.send({success:true})
