@@ -15,10 +15,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 import crypto from "crypto"
 import SlotBookingService from "../../services/user/slotBooking.service";
+import SportsService from "../../services/user/sports.service";
 
 
 
-
+const sportsService=new SportsService()
 const userService =new UserService()
 const slotBookingService=new SlotBookingService()
 
@@ -102,7 +103,6 @@ const options = {
     currency: "INR",
     receipt: "receipt_order_74394",
 };
-console.log(options);
 const order = await instance.orders.create(options);
 
 if (!order) return res.status(500).send("Some error occured");
@@ -168,5 +168,29 @@ if ('paymentAmount' in req.body){
   await slotBookingService.BookSlotPayment(userId,turfId,date,slots,sportsId,total,paymentAmount)
   res.send({success:true})
 }
+})
 
+
+export const allSports=asyncHandler(async(req,res)=>{
+const sports=await sportsService.allSports()
+res.send({sports})
+})
+
+export const allBooking=asyncHandler(async(req,res)=>{
+  const {id}:any=req.query
+  const data:any=await slotBookingService.AllBooking(id)
+  const presentBooking=data.presentBooking
+  const pastBooking=data.pastBooking
+  res.send({presentBooking,pastBooking})
+})
+
+export const cancelBooking=asyncHandler(async(req,res)=>{
+  const {id}:any=req.query
+  const data:any=await slotBookingService.CancelBooking(id)
+  res.send({data})
+})
+
+export const profileDetails=asyncHandler(async(req,res)=>{
+console.log(req.query)
+const {id}:any=req.query
 })

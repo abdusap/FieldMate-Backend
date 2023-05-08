@@ -22,3 +22,7 @@ exports.user.post('/payment/success', user_controller_1.paymentSuccess);
 exports.user.get('/wallet_price', user_controller_1.getWalletAndPrice);
 exports.user.post('/book_slot', user_controller_1.bookSlot);
 exports.user.post('/add_review', review_controller_1.addReview);
+exports.user.get('/all_sports', user_controller_1.allSports);
+exports.user.get('/all_booking', user_controller_1.allBooking);
+exports.user.patch('/cancel_booking', user_controller_1.cancelBooking);
+exports.user.get('/profile', user_controller_1.profileDetails);

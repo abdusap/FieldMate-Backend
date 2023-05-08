@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const slotBooking_model_1 = __importDefault(require("../../models/slotBooking.model"));
 const mongoose_1 = require("mongoose");
+const user_model_1 = __importDefault(require("../../models/user.model"));
 class SlotBookingRepository {
     allSlotBooking(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -67,8 +68,11 @@ class SlotBookingRepository {
     }
     cancelSlot(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield slotBooking_model_1.default.findByIdAndUpdate(new mongoose_1.Types.ObjectId(id), [{ $set: { status: { $not: ["$status"] } } }], { new: true });
-            return user;
+            const details = yield slotBooking_model_1.default.findByIdAndUpdate(new mongoose_1.Types.ObjectId(id), [{ $set: { status: { $not: ["$status"] } } }], { new: true });
+            const userId = details.userId;
+            const total = details.total;
+            const data = yield user_model_1.default.findByIdAndUpdate(userId, { $inc: { wallet: total } });
+            return data;
         });
     }
     slotDetails(id) {

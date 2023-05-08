@@ -16,9 +16,9 @@ const turf_model_1 = __importDefault(require("../../models/turf.model"));
 const turfDetails_model_1 = __importDefault(require("../../models/turfDetails.model"));
 const mongoose_1 = require("mongoose");
 class TurfRepository {
-    getAllTurf() {
+    getAllTurf(search, sports, location) {
         return __awaiter(this, void 0, void 0, function* () {
-            const details = yield turfDetails_model_1.default.aggregate([
+            const pipeline = [
                 { $unwind: "$sports" },
                 { $lookup: {
                         from: "sports",
@@ -63,7 +63,49 @@ class TurfRepository {
                         sports: 1,
                         location: { $arrayElemAt: ["$Location.name", 0] }
                     } },
-            ]);
+            ];
+            const Location = {
+                $match: {
+                    location: location
+                }
+            };
+            const Search = {
+                $match: {
+                    groundName: { $regex: search, $options: 'i' }
+                }
+            };
+            const Sports = {
+                $match: {
+                    sports: { $elemMatch: { $eq: sports } }
+                }
+            };
+            if (location !== "" && sports === "" && search === "") {
+                pipeline.push(Location);
+            }
+            if (sports !== "" && location === "" && search === "") {
+                pipeline.push(Sports);
+            }
+            if (search !== "" && location === "" && sports === "") {
+                pipeline.push(Search);
+            }
+            if (location !== "" && sports !== "" && search === "") {
+                pipeline.push(Location);
+                pipeline.push(Sports);
+            }
+            if (location !== "" && sports === "" && search !== "") {
+                pipeline.push(Location);
+                pipeline.push(Search);
+            }
+            if (location === "" && sports !== "" && search !== "") {
+                pipeline.push(Sports);
+                pipeline.push(Search);
+            }
+            if (location !== "" && sports !== "" && search !== "") {
+                pipeline.push(Search);
+                pipeline.push(Sports);
+                pipeline.push(Location);
+            }
+            const details = yield turfDetails_model_1.default.aggregate(pipeline);
             return details;
         });
     }

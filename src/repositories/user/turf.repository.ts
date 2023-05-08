@@ -7,54 +7,103 @@ import { Types } from 'mongoose';
 class TurfRepository{
 
 
-    async getAllTurf():Promise<object>{
-        const details=await turfDetailsModel.aggregate([
-            {$unwind:"$sports"},
-            {$lookup:{
-                from:"sports",
-                localField:"sports",
-                foreignField:"_id",
-                as:"sports_info"
-            }},
-            {$unwind:"$sports_info"},
-            {$group:{
-                _id:"$_id",
-                turfId:{$first:"$turfId"},
-                amenities:{$first:"$amenities"},
-                groundName:{$first:"$groundName"},
-                image: { $first: "$image" },
-                rules: { $first: "$rules" },
-                slots: { $first: "$slots" },
-                website: { $first: "$website" },
-                sports: { $push: "$sports_info.name" }
+    async getAllTurf(search:string,sports:string,location:string):Promise<object>{
+const pipeline=[
+    {$unwind:"$sports"},
+    {$lookup:{
+        from:"sports",
+        localField:"sports",
+        foreignField:"_id",
+        as:"sports_info"
+    }},
+    {$unwind:"$sports_info"},
+    {$group:{
+        _id:"$_id",
+        turfId:{$first:"$turfId"},
+        amenities:{$first:"$amenities"},
+        groundName:{$first:"$groundName"},
+        image: { $first: "$image" },
+        rules: { $first: "$rules" },
+        slots: { $first: "$slots" },
+        website: { $first: "$website" },
+        sports: { $push: "$sports_info.name" }
 
-            }},{$lookup:{
-                from:"turfs",
-                localField:"turfId",
-                foreignField:"_id",
-                as:"info"
-            }},
-            {$project:{
-                turfId:1,
-                groundName:1,
-                image:1,
-                sports:1,
-                location: { $arrayElemAt: [ "$info.location", 0 ] }
-            }},
-            {$lookup:{
-                from:"locations",
-                localField:"location",
-                foreignField:"_id",
-                as:"Location"
-            }},
-            {$project:{
-                turfId:1,
-                groundName:1,
-                image:1,
-                sports:1,
-                location: { $arrayElemAt: [ "$Location.name", 0 ] }
-            }},
-        ])
+    }},{$lookup:{
+        from:"turfs",
+        localField:"turfId",
+        foreignField:"_id",
+        as:"info"
+    }},
+    {$project:{
+        turfId:1,
+        groundName:1,
+        image:1,
+        sports:1,
+        location: { $arrayElemAt: [ "$info.location", 0 ] }
+    }},
+    {$lookup:{
+        from:"locations",
+        localField:"location",
+        foreignField:"_id",
+        as:"Location"
+    }},
+    {$project:{
+        turfId:1,
+        groundName:1,
+        image:1,
+        sports:1,
+        location: { $arrayElemAt: [ "$Location.name", 0 ] }
+    }},
+]
+
+
+const Location:any={
+    $match:{
+        location:location
+    }
+}
+
+const Search:any={
+    $match:{
+        groundName: { $regex: search, $options: 'i' }
+    }
+}
+
+const Sports:any= { 
+    $match: { 
+        sports: { $elemMatch: { $eq: sports } } } }
+
+if(location!==""&&sports===""&&search===""){
+pipeline.push(Location)
+}
+if(sports!==""&&location===""&&search===""){
+pipeline.push(Sports)
+}
+if(search!==""&&location===""&&sports===""){
+pipeline.push(Search)
+}
+if(location!==""&&sports!==""&&search===""){
+    pipeline.push(Location)
+    pipeline.push(Sports)
+}
+if(location!==""&&sports===""&&search!==""){
+    pipeline.push(Location)
+    pipeline.push(Search)
+}
+if(location===""&&sports!==""&&search!==""){
+    pipeline.push(Sports)
+    pipeline.push(Search)
+}
+if(location!==""&&sports!==""&&search!==""){
+    pipeline.push(Search)
+    pipeline.push(Sports)
+    pipeline.push(Location)
+}
+
+
+
+
+const details=await turfDetailsModel.aggregate(pipeline)
         return details
     }
 

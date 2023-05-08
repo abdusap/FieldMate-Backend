@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const slotBooking_model_1 = __importDefault(require("../../models/slotBooking.model"));
 const user_model_1 = __importDefault(require("../../models/user.model"));
+const mongoose_1 = require("mongoose");
 class SlotBookingRepository {
     getAllBookedSlots(turfId, sports, date) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -46,6 +47,64 @@ class SlotBookingRepository {
                 userId, turfId, sports, date, slots, total, walletAmount, paymentAmount
             });
             data.save();
+            return data;
+        });
+    }
+    allBooking(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield slotBooking_model_1.default.aggregate([
+                {
+                    $match: {
+                        userId: new mongoose_1.Types.ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'sports',
+                        localField: 'sports',
+                        foreignField: '_id',
+                        as: "sports_info"
+                    }
+                },
+                {
+                    $project: {
+                        turfId: 1,
+                        userId: 1,
+                        date: 1,
+                        slots: 1,
+                        status: 1,
+                        sports: { $arrayElemAt: ["$sports_info.name", 0] }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'turfdetails',
+                        localField: 'turfId',
+                        foreignField: 'turfId',
+                        as: "turf_info"
+                    }
+                },
+                {
+                    $project: {
+                        turfId: 1,
+                        userId: 1,
+                        date: 1,
+                        slots: 1,
+                        status: 1,
+                        sports: 1,
+                        groundName: { $arrayElemAt: ["$turf_info.groundName", 0] }
+                    }
+                },
+            ]);
+            return data;
+        });
+    }
+    cancelBooking(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield slotBooking_model_1.default.findByIdAndUpdate(id, [{ $set: { status: { $not: ["$status"] } } }], { new: true });
+            const userId = details.userId;
+            const total = details.total;
+            const data = yield user_model_1.default.findByIdAndUpdate(userId, { $inc: { wallet: total } });
             return data;
         });
     }

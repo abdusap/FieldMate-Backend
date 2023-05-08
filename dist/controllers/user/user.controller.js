@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookSlot = exports.getWalletAndPrice = exports.paymentSuccess = exports.orders = exports.login = exports.verityOtp = exports.signup = void 0;
+exports.profileDetails = exports.cancelBooking = exports.allBooking = exports.allSports = exports.bookSlot = exports.getWalletAndPrice = exports.paymentSuccess = exports.orders = exports.login = exports.verityOtp = exports.signup = void 0;
 const user_validation_1 = __importDefault(require("../../validation/user.validation"));
 const twilio_1 = require("../../config/twilio");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -23,6 +23,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const crypto_1 = __importDefault(require("crypto"));
 const slotBooking_service_1 = __importDefault(require("../../services/user/slotBooking.service"));
+const sports_service_1 = __importDefault(require("../../services/user/sports.service"));
+const sportsService = new sports_service_1.default();
 const userService = new user_service_1.default();
 const slotBookingService = new slotBooking_service_1.default();
 const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -88,7 +90,6 @@ const orders = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
             currency: "INR",
             receipt: "receipt_order_74394",
         };
-        console.log(options);
         const order = yield instance.orders.create(options);
         if (!order)
             return res.status(500).send("Some error occured");
@@ -140,4 +141,24 @@ exports.bookSlot = (0, express_async_handler_1.default)((req, res) => __awaiter(
         yield slotBookingService.BookSlotPayment(userId, turfId, date, slots, sportsId, total, paymentAmount);
         res.send({ success: true });
     }
+}));
+exports.allSports = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const sports = yield sportsService.allSports();
+    res.send({ sports });
+}));
+exports.allBooking = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.query;
+    const data = yield slotBookingService.AllBooking(id);
+    const presentBooking = data.presentBooking;
+    const pastBooking = data.pastBooking;
+    res.send({ presentBooking, pastBooking });
+}));
+exports.cancelBooking = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.query;
+    const data = yield slotBookingService.CancelBooking(id);
+    res.send({ data });
+}));
+exports.profileDetails = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
+    const { id } = req.query;
 }));

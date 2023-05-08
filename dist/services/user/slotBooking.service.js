@@ -32,5 +32,62 @@ class SlotBookingService extends slotBooking_repository_1.default {
             return data;
         });
     }
+    AllBooking(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.allBooking(id);
+            //         const now = new Date();
+            // const pastBookings = data.filter((booking:any) => {
+            //   return booking.date < now;
+            // });
+            // const presentBookings = data.filter((booking:any) => {
+            //   return booking.date >= now && !isSameDay(booking.date, now);
+            // });
+            const now = new Date();
+            // const pastBookings:any = [];
+            // const presentBookings:any = [];
+            // data.forEach((booking:any) => {
+            //     const bookingDate = new Date(booking.date);
+            //     if (bookingDate < now) {
+            //         pastBookings.push(booking);
+            //     } else {
+            //         const isSameDay = bookingDate.getFullYear() === now.getFullYear() &&
+            //             bookingDate.getMonth() === now.getMonth() &&
+            //             bookingDate.getDate() === now.getDate();
+            //         if (isSameDay) {
+            //             presentBookings.push(booking);
+            //         } else {
+            //             presentBookings.push(booking);
+            //         }
+            //     }
+            // });
+            const pastBookings = data.filter((booking) => {
+                return new Date(booking.date) < new Date(now.toDateString());
+            });
+            const presentBookings = data.filter((booking) => {
+                const bookingDate = new Date(booking.date);
+                const sameDay = bookingDate.getFullYear() === now.getFullYear() &&
+                    bookingDate.getMonth() === now.getMonth() &&
+                    bookingDate.getDate() === now.getDate();
+                return sameDay || bookingDate >= new Date(now.toDateString());
+            });
+            console.log(pastBookings);
+            console.log(presentBookings);
+            return {
+                "pastBooking": pastBookings,
+                "presentBooking": presentBookings
+            };
+        });
+    }
+    CancelBooking(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.cancelBooking(id);
+            return data;
+        });
+    }
+}
+function isSameDay(date1, date2) {
+    return date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate();
 }
 exports.default = SlotBookingService;

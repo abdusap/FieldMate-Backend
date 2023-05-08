@@ -16,9 +16,9 @@ const slotBooking_repository_1 = __importDefault(require("../../repositories/use
 const turf_repository_1 = __importDefault(require("../../repositories/user/turf.repository"));
 const slotBookingRepository = new slotBooking_repository_1.default();
 class TurfService extends turf_repository_1.default {
-    allTurf() {
+    allTurf(search, sports, location) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield this.getAllTurf();
+            const data = yield this.getAllTurf(search, sports, location);
             return data;
         });
     }

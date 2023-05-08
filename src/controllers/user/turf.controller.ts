@@ -14,8 +14,8 @@ export const allLocationAndSports=asyncHandler(async(req,res)=>{
     })
 
     export const allTurf=asyncHandler(async(req,res)=>{
-      
-      const turfs= await turfService.allTurf()
+      const {search,sports,location}:any=req.query
+      const turfs= await turfService.allTurf(search,sports,location)
       res.send({turfs})
     })
 

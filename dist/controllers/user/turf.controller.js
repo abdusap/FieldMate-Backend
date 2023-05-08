@@ -26,7 +26,8 @@ exports.allLocationAndSports = (0, express_async_handler_1.default)((req, res) =
     res.send({ sports: sports, location: location });
 }));
 exports.allTurf = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const turfs = yield turfService.allTurf();
+    const { search, sports, location } = req.query;
+    const turfs = yield turfService.allTurf(search, sports, location);
     res.send({ turfs });
 }));
 exports.turfDetails = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

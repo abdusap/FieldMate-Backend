@@ -5,8 +5,9 @@ import TurfRepository from "../../repositories/user/turf.repository"
 const slotBookingRepository=new SlotBookingRepository()
 class TurfService extends TurfRepository{
 
-    async  allTurf():Promise<object>{
-        const data=await this.getAllTurf()
+    async  allTurf(search:string,sports:string,location:string):Promise<object>{
+        const data=await this.getAllTurf(search,sports,location)
+        
         return data
     }
 

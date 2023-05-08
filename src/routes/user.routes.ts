@@ -1,5 +1,5 @@
 import  express  from "express";
-import {  bookSlot, getWalletAndPrice, login, orders, paymentSuccess, signup, verityOtp } from "../controllers/user/user.controller";
+import {  allBooking, allSports, bookSlot, cancelBooking, getWalletAndPrice, login, orders, paymentSuccess, profileDetails, signup, verityOtp } from "../controllers/user/user.controller";
 import { allLocationAndSports, allTurf, availableSlots, availableSports, turfDetails } from "../controllers/user/turf.controller";
 import { addReview } from "../controllers/user/review.controller";
 
@@ -31,6 +31,14 @@ user.get('/wallet_price',getWalletAndPrice)
 user.post('/book_slot',bookSlot)
 
 user.post('/add_review',addReview)
+
+user.get('/all_sports',allSports)
+
+user.get('/all_booking',allBooking)
+
+user.patch('/cancel_booking',cancelBooking)
+
+user.get('/profile',profileDetails)
 
 
 
