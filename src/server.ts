@@ -44,16 +44,13 @@ import { turf } from './routes/turf.routes'
 import errorHandler from './error/error.handler'
 // import { user } from './routes/user.routes'
 app.use(cookieParser());
-// app.use('/',userRouter)
-app.use('/',user)
-app.use('/admin',admin)
-app.use('/turf',turf)
+
+
+app.use('/backend/',user)
+app.use('/backend/admin',admin)
+app.use('/backend/turf',turf)
 
 app.use(errorHandler)
-
-// app.get('/helo',(req, res)=>{
-//     console.log('helow')
-// })
 
 
 

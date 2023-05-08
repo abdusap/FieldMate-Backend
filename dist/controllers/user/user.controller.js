@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.profileDetails = exports.cancelBooking = exports.allBooking = exports.allSports = exports.bookSlot = exports.getWalletAndPrice = exports.paymentSuccess = exports.orders = exports.login = exports.verityOtp = exports.signup = void 0;
+exports.imageUpdate = exports.profileUpdate = exports.profileDetails = exports.cancelBooking = exports.allBooking = exports.allSports = exports.bookSlot = exports.getWalletAndPrice = exports.paymentSuccess = exports.orders = exports.login = exports.verityOtp = exports.signup = void 0;
 const user_validation_1 = __importDefault(require("../../validation/user.validation"));
 const twilio_1 = require("../../config/twilio");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -159,6 +159,20 @@ exports.cancelBooking = (0, express_async_handler_1.default)((req, res) => __awa
     res.send({ data });
 }));
 exports.profileDetails = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.query);
     const { id } = req.query;
+    const details = yield userService.GetUserById(id);
+    res.send({ details });
+}));
+exports.profileUpdate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, name } = req.body;
+    const details = yield userService.UpdateName(id, name);
+    res.send({ details });
+}));
+exports.imageUpdate = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.file && req.body) {
+        const { id } = req.body;
+        const image = req.file.path;
+        const updatedData = yield userService.UpdateImage(id, image);
+        res.send({ updatedData });
+    }
 }));

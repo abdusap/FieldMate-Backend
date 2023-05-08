@@ -191,6 +191,23 @@ export const cancelBooking=asyncHandler(async(req,res)=>{
 })
 
 export const profileDetails=asyncHandler(async(req,res)=>{
-console.log(req.query)
 const {id}:any=req.query
+const details = await userService.GetUserById(id)
+res.send({details})
+})
+
+export const profileUpdate=asyncHandler(async(req,res)=>{
+  const {id,name}=req.body
+  const details = await userService.UpdateName(id,name)
+  res.send({details})
+})
+
+export const imageUpdate=asyncHandler(async(req,res)=>{
+ 
+  if(req.file&&req.body){
+    const {id}=req.body
+    const image=req.file.path
+    const updatedData=await userService.UpdateImage(id,image)
+    res.send({updatedData})
+  }
 })

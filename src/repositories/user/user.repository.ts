@@ -25,6 +25,16 @@ class UserRepository{
     const user =await userModel.findById(id);
     return user
     }
+
+    async updateName(id:string,name:string):Promise <null | Iuser> {
+    const user =await userModel.findByIdAndUpdate(id,{$set:{name:name}})
+    return user
+    }
+
+    async updateImage(id:string,image:string):Promise <null | Iuser> {
+    const user =await userModel.findByIdAndUpdate(id,{$set:{image:image}},{upsert:true,new:true})
+    return user
+    }
 }
 
 export default UserRepository

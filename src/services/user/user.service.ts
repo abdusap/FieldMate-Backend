@@ -36,6 +36,22 @@ class UserService extends UserRepository{
         }
     }
 
+    async GetUserById(id:string):Promise<Iuser|null>{
+       const data = await this.Getuser(id)
+       return data
+    }
+
+    async UpdateName(id:string,name:string):Promise<Iuser|null>{
+       const data = await this.updateName(id,name)
+       return data
+    }
+
+    async UpdateImage(id:string,image:string):Promise<Iuser|null>{
+       const data = await this.updateImage(id,image)
+       return data
+    }
+
+
 
 }
 

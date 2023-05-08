@@ -33,5 +33,17 @@ class UserRepository {
             return user;
         });
     }
+    updateName(id, name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.default.findByIdAndUpdate(id, { $set: { name: name } });
+            return user;
+        });
+    }
+    updateImage(id, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield user_model_1.default.findByIdAndUpdate(id, { $set: { image: image } }, { upsert: true, new: true });
+            return user;
+        });
+    }
 }
 exports.default = UserRepository;

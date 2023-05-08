@@ -37,12 +37,8 @@ const turf_routes_1 = require("./routes/turf.routes");
 const error_handler_1 = __importDefault(require("./error/error.handler"));
 // import { user } from './routes/user.routes'
 app.use((0, cookie_parser_1.default)());
-// app.use('/',userRouter)
-app.use('/', user_routes_1.user);
-app.use('/admin', admin_routes_1.admin);
-app.use('/turf', turf_routes_1.turf);
+app.use('/backend/', user_routes_1.user);
+app.use('/backend/admin', admin_routes_1.admin);
+app.use('/backend/turf', turf_routes_1.turf);
 app.use(error_handler_1.default);
-// app.get('/helo',(req, res)=>{
-//     console.log('helow')
-// })
 app.listen(9000, () => { console.log('server started'); });

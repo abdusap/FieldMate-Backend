@@ -54,5 +54,23 @@ class UserService extends user_repository_1.default {
             };
         });
     }
+    GetUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.Getuser(id);
+            return data;
+        });
+    }
+    UpdateName(id, name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.updateName(id, name);
+            return data;
+        });
+    }
+    UpdateImage(id, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = yield this.updateImage(id, image);
+            return data;
+        });
+    }
 }
 exports.default = UserService;
