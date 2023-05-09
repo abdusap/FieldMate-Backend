@@ -28,3 +28,4 @@ exports.user.get('/all_booking', user_controller_1.allBooking);
 exports.user.patch('/cancel_booking', user_controller_1.cancelBooking);
 exports.user.route('/profile').get(user_controller_1.profileDetails).post(user_controller_1.profileUpdate);
 exports.user.post('/profile_image', multer_1.default.single('image'), user_controller_1.imageUpdate);
+exports.user.get('/review', review_controller_1.getReviews);

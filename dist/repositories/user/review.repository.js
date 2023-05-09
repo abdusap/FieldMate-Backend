@@ -41,5 +41,11 @@ class ReviewRepository {
             return count;
         });
     }
+    getReview(turfId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield review_model_1.default.find({ turfId }).sort({ rating: -1 }).limit(8);
+            return details;
+        });
+    }
 }
 exports.default = ReviewRepository;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addReview = void 0;
+exports.getReviews = exports.addReview = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const review_services_1 = __importDefault(require("../../services/user/review.services"));
 const reviewService = new review_services_1.default();
@@ -20,4 +20,10 @@ exports.addReview = (0, express_async_handler_1.default)((req, res) => __awaiter
     const { turfId, userId, title, rating, message } = req.body;
     const review = yield reviewService.AddReview(turfId, userId, title, rating, message);
     res.send({ review });
+}));
+exports.getReviews = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.query);
+    const { id } = req.query;
+    const reviews = yield reviewService.GetReview(id);
+    res.send({ reviews });
 }));

@@ -26,5 +26,11 @@ class ReviewService extends review_repository_1.default {
             return details;
         });
     }
+    GetReview(turfId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield this.getReview(turfId);
+            return details;
+        });
+    }
 }
 exports.default = ReviewService;

@@ -211,3 +211,4 @@ export const imageUpdate=asyncHandler(async(req,res)=>{
     res.send({updatedData})
   }
 })
+

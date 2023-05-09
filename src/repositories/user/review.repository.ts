@@ -27,5 +27,10 @@ class ReviewRepository{
       return count
     }
 
+    async getReview(turfId:string):Promise<Ireview|object>{
+      const details = await reviewModel.find({turfId}).sort({rating:-1}).limit(8)
+      return details
+    }
+
 }
 export default ReviewRepository

@@ -12,6 +12,11 @@ class ReviewService extends ReviewRepository{
             const details = await this.allReview(turfId)
             return details
     }
+
+    async GetReview(turfId:string):Promise<Ireview | object>{
+            const details = await this.getReview(turfId)
+            return details
+    }
 }
 
 export default ReviewService

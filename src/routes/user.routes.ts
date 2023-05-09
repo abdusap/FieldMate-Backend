@@ -1,7 +1,7 @@
 import  express  from "express";
 import {  allBooking, allSports, bookSlot, cancelBooking, getWalletAndPrice, imageUpdate, login, orders, paymentSuccess, profileDetails, profileUpdate, signup, verityOtp } from "../controllers/user/user.controller";
 import { allLocationAndSports, allTurf, availableSlots, availableSports, turfDetails } from "../controllers/user/turf.controller";
-import { addReview } from "../controllers/user/review.controller";
+import { addReview, getReviews } from "../controllers/user/review.controller";
 import uploadCloudinary from "../helper/multer";
 
 
@@ -42,6 +42,8 @@ user.patch('/cancel_booking',cancelBooking)
 user.route('/profile').get(profileDetails).post(profileUpdate)
 
 user.post('/profile_image',uploadCloudinary.single('image'),imageUpdate)
+
+user.get('/review',getReviews)
 
 
 

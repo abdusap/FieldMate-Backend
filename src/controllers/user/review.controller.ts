@@ -8,3 +8,10 @@ const review=await reviewService.AddReview(turfId,userId,title,rating,message)
 res.send({review})
 
 })
+
+export const getReviews=asyncHandler(async(req,res)=>{
+    console.log(req.query);
+    const {id}:any=req.query
+    const reviews = await reviewService.GetReview(id)
+    res.send({reviews})
+    })
