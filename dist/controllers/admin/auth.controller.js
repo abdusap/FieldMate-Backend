@@ -23,7 +23,9 @@ exports.login = (0, express_async_handler_1.default)((req, res) => __awaiter(voi
     const passwordMatch = yield AuthService.login(email, password);
     if (passwordMatch) {
         const data = { email: email };
-        const token = jsonwebtoken_1.default.sign(data, process.env.JWT_SECRET, { expiresIn: 86400 });
+        const token = jsonwebtoken_1.default.sign(data, process.env.JWT_SECRET, {
+            expiresIn: 86400,
+        });
         res.json({ success: true, token: token });
     }
     else if (passwordMatch == null) {

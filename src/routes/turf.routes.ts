@@ -1,7 +1,7 @@
 import  express  from "express";
 import { allLocation } from "../controllers/turf/location.controller";
 import { jwtChecker, login, signup, verifyOtp } from "../controllers/turf/turf.controller";
-import { addAmenity, addRules, addSlot, details, getSlot } from "../controllers/turf/turfDetails.controller";
+import { addAmenity, addRules, addSlot, deleteImage, details, getSlot } from "../controllers/turf/turfDetails.controller";
 import uploadCloudinary from "../helper/multer";
 import { getAllSportsAndDetails } from "../controllers/turf/sports.controller";
 import { cancelSlot, dashboardDetails, getSlotBooking, slotDetails } from "../controllers/turf/slotBooking.controller";
@@ -44,3 +44,5 @@ turf.patch('/slot_details',slotDetails)
 turf.get('/all_review',allReview)
 
 turf.get('/dashboard_details',dashboardDetails)
+
+turf.post('/delete_image',deleteImage)

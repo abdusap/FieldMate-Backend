@@ -26,6 +26,7 @@ class SlotBookingRepository{
                     date:1,
                     slots:1,
                     status:1,
+                    total:1,
                     sports:{ $arrayElemAt: [ "$sports_info.name", 0 ] }
                     
                 }
@@ -46,6 +47,7 @@ class SlotBookingRepository{
                     slots:1,
                     status:1,
                     sports:1,
+                    total:1,
                     name:{ $arrayElemAt: [ "$user_info.name", 0 ] },
                     mobile:{ $arrayElemAt: [ "$user_info.mobile", 0 ] }
                     

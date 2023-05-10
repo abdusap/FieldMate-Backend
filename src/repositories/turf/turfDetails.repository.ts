@@ -3,7 +3,6 @@ import turfModel from "../../models/turf.model";
 import turfDetailsModel from "../../models/turfDetails.model";
 import { Types } from 'mongoose';
 
-// import  Types  from "mongoose";
 
 class TurfDetailsRepository{
     async addTurfDetails(
@@ -12,17 +11,26 @@ class TurfDetailsRepository{
         website:string,
         sport:Array<string>,
         image:Array<string>
-    ):Promise<IturfDetails>{
+    ):Promise<IturfDetails |any>{
         const sports = sport.map(sport =>new Types.ObjectId(sport));
         const turfId=new Types.ObjectId(turfID)
-        // const turfDetails = new turfDetailsModel({turfId,groundName,website,sports,image})
-        // await turfDetails.save();
-        const turfDetails=await turfDetailsModel.findOneAndUpdate(
-            {turfId},
-            {$set:{turfId,groundName,website,sports,image}},
-            { upsert: true, new: true }
-        )
-        return turfDetails
+        if(image.length===0){
+
+            const turfDetails=await turfDetailsModel.findOneAndUpdate(
+                {turfId},
+                {$set:{turfId,groundName,website,sports}},
+                { upsert: true, new: true }
+                )
+                return turfDetails
+            }
+            if(image.length!==0){
+               const turfDetails = await turfDetailsModel.findOneAndUpdate(
+                    { turfId },
+                    { $push: { image: { $each: image } }, $set: { turfId, groundName, website, sports } },
+                    { upsert: true, new: true }
+                  );
+                  return turfDetails
+            }
     }
     async addAmenity(
         turfId:string,
@@ -38,7 +46,6 @@ class TurfDetailsRepository{
         }
     async getTurfDetails(
         turfId:string):Promise<object|null>{
-            // const data=await turfModel.findOne({_id:turfId})
             const data=await turfModel.aggregate([
                 {$match:{_id:new Types.ObjectId(turfId)}},
                 {$lookup:{
@@ -71,6 +78,12 @@ class TurfDetailsRepository{
         async getSlot(
             turfId:string):Promise<IturfDetails|null>{
                 const details=await turfDetailsModel.findOne({turfId:new Types.ObjectId(turfId)})
+              return details
+            }
+
+        async deleteImage(
+            turfId:string,image:string):Promise<IturfDetails|null |any>{
+                const details=await turfDetailsModel.updateOne({turfId:new Types.ObjectId(turfId)},{ $pull: { image: image } })
               return details
             }
     

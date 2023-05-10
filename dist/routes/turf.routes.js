@@ -31,3 +31,4 @@ exports.turf.patch('/cancel_slot', slotBooking_controller_1.cancelSlot);
 exports.turf.patch('/slot_details', slotBooking_controller_1.slotDetails);
 exports.turf.get('/all_review', review_controller_1.allReview);
 exports.turf.get('/dashboard_details', slotBooking_controller_1.dashboardDetails);
+exports.turf.post('/delete_image', turfDetails_controller_1.deleteImage);

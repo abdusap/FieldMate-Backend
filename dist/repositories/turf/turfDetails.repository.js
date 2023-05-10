@@ -15,16 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const turf_model_1 = __importDefault(require("../../models/turf.model"));
 const turfDetails_model_1 = __importDefault(require("../../models/turfDetails.model"));
 const mongoose_1 = require("mongoose");
-// import  Types  from "mongoose";
 class TurfDetailsRepository {
     addTurfDetails(turfID, groundName, website, sport, image) {
         return __awaiter(this, void 0, void 0, function* () {
             const sports = sport.map(sport => new mongoose_1.Types.ObjectId(sport));
             const turfId = new mongoose_1.Types.ObjectId(turfID);
-            // const turfDetails = new turfDetailsModel({turfId,groundName,website,sports,image})
-            // await turfDetails.save();
-            const turfDetails = yield turfDetails_model_1.default.findOneAndUpdate({ turfId }, { $set: { turfId, groundName, website, sports, image } }, { upsert: true, new: true });
-            return turfDetails;
+            if (image.length === 0) {
+                const turfDetails = yield turfDetails_model_1.default.findOneAndUpdate({ turfId }, { $set: { turfId, groundName, website, sports } }, { upsert: true, new: true });
+                return turfDetails;
+            }
+            if (image.length !== 0) {
+                const turfDetails = yield turfDetails_model_1.default.findOneAndUpdate({ turfId }, { $push: { image: { $each: image } }, $set: { turfId, groundName, website, sports } }, { upsert: true, new: true });
+                return turfDetails;
+            }
         });
     }
     addAmenity(turfId, amenity) {
@@ -41,7 +44,6 @@ class TurfDetailsRepository {
     }
     getTurfDetails(turfId) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const data=await turfModel.findOne({_id:turfId})
             const data = yield turf_model_1.default.aggregate([
                 { $match: { _id: new mongoose_1.Types.ObjectId(turfId) } },
                 { $lookup: {
@@ -73,6 +75,12 @@ class TurfDetailsRepository {
     getSlot(turfId) {
         return __awaiter(this, void 0, void 0, function* () {
             const details = yield turfDetails_model_1.default.findOne({ turfId: new mongoose_1.Types.ObjectId(turfId) });
+            return details;
+        });
+    }
+    deleteImage(turfId, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield turfDetails_model_1.default.updateOne({ turfId: new mongoose_1.Types.ObjectId(turfId) }, { $pull: { image: image } });
             return details;
         });
     }

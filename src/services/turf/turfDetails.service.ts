@@ -32,6 +32,11 @@ class turfDetails extends TurfDetailsRepository{
       return details
 }
 
+   async DeleteImage(turfId:string,image:string): Promise<object|null|any> {
+    const details=await this.deleteImage(turfId,image)
+      return details
+}
+
 
 
 }

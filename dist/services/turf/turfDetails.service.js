@@ -51,5 +51,11 @@ class turfDetails extends turfDetails_repository_1.default {
             return details;
         });
     }
+    DeleteImage(turfId, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const details = yield this.deleteImage(turfId, image);
+            return details;
+        });
+    }
 }
 exports.default = turfDetails;
