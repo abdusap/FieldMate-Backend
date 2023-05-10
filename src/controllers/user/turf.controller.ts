@@ -37,9 +37,6 @@ export const allLocationAndSports=asyncHandler(async(req,res)=>{
 
     export const availableSlots=asyncHandler(async(req,res)=>{
       const {turfId,sports,date}:any=req.query
-console.log(turfId);
-console.log(sports);
-console.log(date);
 const slots=await turfService.AvailableSlots(turfId,sports,date)
 const bookedSlots=slots.bookedSlots
 const allSlots=slots.allSlots.slots

@@ -18,7 +18,7 @@ const mongoose_1 = require("mongoose");
 class SlotBookingRepository {
     getAllBookedSlots(turfId, sports, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield slotBooking_model_1.default.find({ turfId: turfId, sports: sports, date: date });
+            const data = yield slotBooking_model_1.default.find({ turfId: turfId, sports: sports, date: date, status: true });
             return data;
         });
     }

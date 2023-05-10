@@ -70,8 +70,6 @@ class SlotBookingService extends slotBooking_repository_1.default {
                     bookingDate.getDate() === now.getDate();
                 return sameDay || bookingDate >= new Date(now.toDateString());
             });
-            console.log(pastBookings);
-            console.log(presentBookings);
             return {
                 "pastBooking": pastBookings,
                 "presentBooking": presentBookings

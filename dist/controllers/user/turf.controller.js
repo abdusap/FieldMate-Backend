@@ -45,9 +45,6 @@ exports.availableSports = (0, express_async_handler_1.default)((req, res) => __a
 }));
 exports.availableSlots = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { turfId, sports, date } = req.query;
-    console.log(turfId);
-    console.log(sports);
-    console.log(date);
     const slots = yield turfService.AvailableSlots(turfId, sports, date);
     const bookedSlots = slots.bookedSlots;
     const allSlots = slots.allSlots.slots;

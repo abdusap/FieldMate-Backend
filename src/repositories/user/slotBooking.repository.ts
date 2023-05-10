@@ -6,7 +6,7 @@ import { Types } from 'mongoose';
 class SlotBookingRepository{
 
     async getAllBookedSlots(turfId:string,sports:string,date:string):Promise<object>{
-        const data = await slotBookingModel.find({turfId:turfId,sports:sports,date:date})
+        const data = await slotBookingModel.find({turfId:turfId,sports:sports,date:date,status:true})
         return data
     }
 
